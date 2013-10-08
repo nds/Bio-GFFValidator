@@ -35,8 +35,8 @@ has 'gene_models'	  => ( is => 'rw', isa => 'ArrayRef');
 =cut
 
 
-sub parse
-{
+sub parse {
+
   my ($self) = @_;
   my @array_of_features;
   

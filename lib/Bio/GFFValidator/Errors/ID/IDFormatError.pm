@@ -3,6 +3,7 @@ package Bio::GFFValidator::Errors::ID::IDFormatError;
 
 =head1 SYNOPSIS
 
+Checks the ID (column 1) of the feature adheres to the right format
 
 =method 
 
@@ -15,26 +16,27 @@ extends "Bio::GFFValidator::Errors::BaseError";
 
 has 'id'        => ( is => 'ro', isa => 'Str',  required => 1 );
 
-sub validate
-{
+sub validate {
+
 	my ($self) = @_;
 	if($self->id){
 		if($self->id =~ /^\>/){
-			# ID cannot start with an unescaped >
-			my $error_handler = Bio::GFFValidator::ErrorHandlers::IDErrorsHandler->new(
-			                    error=>"ID cannot start with an unescaped >");
-			$error_handler->handle();
+			$self->line("line number");
+			$self->value($self->id);
+			$self->message("ID contains an unescaped > symbol at the start");
 		}
 		
-	}else{
-		# ID cannot be empty
-	
-	
 	}
-
+	
+	return $self;
 }
 
+sub fix_it {
 
+
+
+
+}
 
 
 
