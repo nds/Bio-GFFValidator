@@ -23,6 +23,7 @@ use Bio::GFFValidator::Errors::Start_and_End::NotPositiveIntegerError;
 use Bio::GFFValidator::Errors::Start_and_End::StartNotLessThanEndError;
 use Bio::GFFValidator::Errors::Strand::StrandNotInRightFormatError;
 use Bio::GFFValidator::Errors::Phase::CDSFeatureMissingPhaseError;
+use Bio::GFFValidator::Errors::Type::TypeEmptyError;
 use Bio::GFFValidator::ErrorHandlers::PrintReport;
 
 
@@ -63,6 +64,13 @@ sub run {
 	my $arrayref = $gff_parser->features;
 	for my $feature (@$arrayref){
 		# ID errors (column 1)
+		
+		# Source (column 2)
+		
+		
+		# Type (column 3)
+		my $typeempty_error = (Bio::GFFValidator::Errors::Type::TypeEmptyError->new(feature => $feature))->validate();
+		push(@errors_found, $typeempty_error);
 	
 	
 		# Start and end (columns 4 and 5)
