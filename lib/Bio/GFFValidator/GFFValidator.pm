@@ -18,6 +18,9 @@ use Cwd;
 use Bio::GFFValidator::Parser::Main;
 use Bio::GFFValidator::Errors::ID::IDFormatError;
 use Bio::GFFValidator::Errors::Parser::ParserError;
+use Bio::GFFValidator::Errors::Start_and_End::NotWithinRangeError;
+use Bio::GFFValidator::Errors::Start_and_End::NotPositiveIntegerError;
+use Bio::GFFValidator::Errors::Start_and_End::StartNotLessThanEndError;
 use Bio::GFFValidator::ErrorHandlers::PrintReport;
 
 
@@ -47,18 +50,33 @@ sub run {
 		$gff_parser->parse();
 	};
 	
-	# Catch errors thrown by the Bio Perl parser. Will this catch multiple errors?
+	# Catch errors thrown by the Bio Perl parser. This still dies - do some monkey patching of Bio::Root::Exception!!!
 	if(my $exception = $@){ 
 		my $parser_errors = (Bio::GFFValidator::Errors::Parser::ParserError->new(exception => $exception))->validate();
 		push(@errors_found, $parser_errors);
 	}
 	
-	if($self->handler_option == 1){ # Print errors into a report
-		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(
-																errors => \@errors_found,
-																error_report => $self->error_report);
-		$report_printer->print();
+
+	# Run the tests for each of the features
+	my $arrayref = $gff_parser->features;
+	for my $feature (@$arrayref){
+		# ID errors (column 1)
+	
+	
+		# Start and end (columns 4 and 5)
+		my $notpositiveinteger_error = (Bio::GFFValidator::Errors::Start_and_End::NotPositiveIntegerError->new(feature => $feature))->validate();
+		push(@errors_found, $notpositiveinteger_error);
+		my $startnotlessthanend_error = (Bio::GFFValidator::Errors::Start_and_End::StartNotLessThanEndError->new(feature => $feature))->validate();
+		push(@errors_found, $startnotlessthanend_error);
+		my $notwithinrange_error = (Bio::GFFValidator::Errors::Start_and_End::NotWithinRangeError->new(feature => $feature, seq_regions => $gff_parser->seq_regions ))->validate();
+		push(@errors_found, $notwithinrange_error);
+		
 	}
+	
+	if($self->handler_option == 1){ # Print errors into a report
+		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(errors => \@errors_found,error_report => $self->error_report);
+		$report_printer->print();
+	} # Else, print summary or get the validator to fix errors 
 	
 
    return $self;

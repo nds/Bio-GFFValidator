@@ -34,17 +34,18 @@ sub validate {
   # Example: MSG: [ctg123 . gene            1000  9000  .  +  .  ID=gene00001;Name=EDEN] does not look like GFF3 to me
   #if($self->error =~ m/MSG:\[(\.+)\]does not look like GFF3 to me/){
 
+  print STDERR "~Got a parser error \n";
+  print STDERR "$self->exception \n";
   if($self->exception =~ m/does not look like GFF3 to me/){
-  	 $self->line("line number");
-  	 $self->value("value");
-  	 $self->message("Not a valid GFF3 line as it does not contain 9 tab-delimited values.");
+  	 $self->set_error_message("line_number", "value", "Not a valid GFF3 line as it does not contain 9 tab-delimited values.");
+  }elsif($self->exception->text() =~ m/\'\' is not a valid/){
+  	 $self->set_error_message("line_number", "value", "Empty fields cannot be left blank. They must have a dot.");
   }else{
      my $message = $self->exception->text(); #{'-text'};
-  	 $self->line("line number");
-  	 $self->value("value");
-  	 $self->message($message);
-  
+  	 $self->set_error_message("line_number", "value", $message);
   }
+  
+  return $self;
   
 }
 

@@ -40,8 +40,12 @@ sub print {
 
 
   for my $error (@ {$self->errors} ){
-  
-  	print $fh $error->get_error_message."\n";
+  	
+  	if($error->triggered){
+  		print $fh $error->get_error_message."\n";
+  		print STDERR $error->get_error_message."\n"; # Delete
+  	}
+  	
   
   }
   

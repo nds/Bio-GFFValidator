@@ -15,15 +15,25 @@ use Moose;
 has 'line_number'        => ( is => 'rw', isa => 'Str');
 has 'value'        	     => ( is => 'rw', isa => 'Str');
 has 'message'        	 => ( is => 'rw', isa => 'Str');
+has 'triggered'          => ( is => 'rw', isa => 'Bool', default  => 0 ); # Set to true if the test has failed
 
 sub validate {
 	# Do the validation check
 	# Set the line number, value and message
 }
 
+sub set_error_message {
+	my ($self, $line_number, $value, $message) = @_;
+	$self->line_number($line_number);
+	$self->value($value);
+	$self->message($message);
+	$self->triggered(1);
+	return $self;
+}
+
 sub get_error_message {
 	my ($self) = @_;
-	return $self->line_number.": ".$self->value." ".$self->message."\n";
+	return $self->line_number.": ".$self->value.": ".$self->message."\n";
 }
 
 

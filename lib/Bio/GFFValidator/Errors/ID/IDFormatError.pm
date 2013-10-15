@@ -21,9 +21,7 @@ sub validate {
 	my ($self) = @_;
 	if($self->id){
 		if($self->id =~ /^\>/){
-			$self->line("line number");
-			$self->value($self->id);
-			$self->message("ID contains an unescaped > symbol at the start");
+			$self->set_error_message("line_number", $self->id, "ID contains an unescaped > symbol at the start");
 		}
 		
 	}

@@ -18,7 +18,7 @@ my $cwd = getcwd();
 # Create a validator object with a test GFF3 file
 ok(
   (my $gff_validator = Bio::GFFValidator::GFFValidator->new(
-   gff_file => 't/data/sample_no_errors.gff3',
+   gff_file =>  't/data/sample.gff3', #'t/data/sample_no_errors.gff3',
    )),
    'Create overall validator object');
    
