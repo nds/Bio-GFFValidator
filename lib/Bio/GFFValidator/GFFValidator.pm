@@ -21,6 +21,7 @@ use Bio::GFFValidator::Errors::Parser::ParserError;
 use Bio::GFFValidator::Errors::Start_and_End::NotWithinRangeError;
 use Bio::GFFValidator::Errors::Start_and_End::NotPositiveIntegerError;
 use Bio::GFFValidator::Errors::Start_and_End::StartNotLessThanEndError;
+use Bio::GFFValidator::Errors::Strand::StrandNotInRightFormatError;
 use Bio::GFFValidator::ErrorHandlers::PrintReport;
 
 
@@ -71,6 +72,11 @@ sub run {
 		my $notwithinrange_error = (Bio::GFFValidator::Errors::Start_and_End::NotWithinRangeError->new(feature => $feature, seq_regions => $gff_parser->seq_regions ))->validate();
 		push(@errors_found, $notwithinrange_error);
 		
+		# Score (column 6) - no checks at the moment as specification sketchy
+		
+		# Strand (column 7) 
+		my $strandnotinrightformat_error = (Bio::GFFValidator::Errors::Strand::StrandNotInRightFormatError->new(feature => $feature))->validate();
+		push(@errors_found, $strandnotinrightformat_error);
 	}
 	
 	if($self->handler_option == 1){ # Print errors into a report
