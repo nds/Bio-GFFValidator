@@ -107,12 +107,12 @@ sub run {
 			push(@errors_found, $nonreservedtagsstartingwithuppercase_error);
 			
 			# Some tags are not allowed multiple values
-			if($tag =~ m/ID|Name|Target|Gap/){				
-				my $multiplevalues_error = (Bio::GFFValidator::Errors::Attributes::MultipleValuesError->new(tag => $tag, value => $attributes{$tag}, feature_id => $feature->seq_id))->validate();
+			if($tag =~ m/ID|Name|Target|Gap/){			
+				my $multiplevalues_error = (Bio::GFFValidator::Errors::Attributes::MultipleValuesError->new(tag => $tag, tag_values => $attributes{$tag}, feature_id => $feature->seq_id))->validate();
 				push(@errors_found, $multiplevalues_error);
 			}
 			
-			
+			# Collect the IDS to do a uniqueness test later on
 			if($tag =~ m/ID/){
 				my $value = $attributes{$tag}[0];
 				$ids{$value}++;
