@@ -3,7 +3,8 @@ package Bio::GFFValidator::Parser::Main;
 
 =head1 SYNOPSIS
 
-Parses a GFF file using Bio Perl and creates two arrays: one of feature objects and one of gene models
+Parses a GFF file using Bio Perl and creates three arrays: one of feature objects, one of sequence region lines and one of gene models
+
 
 =head1 SEE ALSO
 
@@ -15,6 +16,7 @@ Parses a GFF file using Bio Perl and creates two arrays: one of feature objects 
 use Moose;
 use Bio::Tools::GFF;
 use Bio::LocatableSeq;
+use Bio::GFFValidator::GeneModel::Gene;
 
 #use Bio::Root::Exception;
 #use Error qw(:try); # Moose exports a keyword called with which clashes with Error's. This returns a prototype mismatch error
@@ -25,6 +27,7 @@ has 'gff_file'        => ( is => 'ro', isa => 'Str',  required => 1 );
 has 'features'		  => ( is => 'rw', isa => 'ArrayRef');
 has 'seq_regions'	  => ( is => 'rw', isa => 'HashRef' );
 has 'gene_models'	  => ( is => 'rw', isa => 'ArrayRef');
+
 
 =head2 parse
 
@@ -53,6 +56,35 @@ sub parse {
 		# All feature lines
         while(my $feature = $gff_parser->next_feature()) {
          	push(@array_of_features, $feature);
+         	
+         	# Also construct the gene models
+         	my $type = lc($feature->primary_tag());
+         	my $current_gene;
+         	my $current_prefix; 
+         	my $prefix;   	
+         	if( $type =~ m/gene/ ){ 
+         		($prefix) = $feature->each_tag_value('ID');
+         		if( (not defined $current_gene) or ($current_gene->prefix ne $prefix) ){
+         			# Create a gene feature. Set it to be current gene and its prefix to be current prefix
+         			bless $feature, 'Bio::GFFValidator::GeneModel::Gene';
+         			$current_gene = $feature;
+         			$current_prefix = $current_gene->prefix;
+
+         		
+         		}
+         	
+         	
+         	
+         	}elsif( $type =~ m/transcript/) {
+         	
+         	
+         	
+         	}elsif( $type =~ m/exon|utr|polypeptide/ ) { #Extend this list as other types related to gene models are discovered
+         	
+         	
+         	
+         	}
+         	
         }
         
         # Process the header. Bio perl so far only returns seq region lines

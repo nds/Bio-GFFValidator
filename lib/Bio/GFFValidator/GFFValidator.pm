@@ -12,8 +12,8 @@ Runs the validation checks on the feature objects and gene models produced by th
 =cut
 
 use Moose;
-
 use Cwd;
+use Data::Dumper;
 
 use Bio::GFFValidator::Parser::Main;
 use Bio::GFFValidator::Errors::ID::IDFormatError;
@@ -24,7 +24,13 @@ use Bio::GFFValidator::Errors::Start_and_End::StartNotLessThanEndError;
 use Bio::GFFValidator::Errors::Strand::StrandNotInRightFormatError;
 use Bio::GFFValidator::Errors::Phase::CDSFeatureMissingPhaseError;
 use Bio::GFFValidator::Errors::Type::TypeEmptyError;
+use Bio::GFFValidator::Errors::Attributes::NonReservedTagsStartingWithUpperCaseError;
+use Bio::GFFValidator::Errors::Attributes::ValueEmptyError;
+use Bio::GFFValidator::Errors::Attributes::ID::IDNotUniqueError;
+use Bio::GFFValidator::Errors::Attributes::MultipleValuesError;
 use Bio::GFFValidator::ErrorHandlers::PrintReport;
+
+
 
 
 has 'gff_file'        => ( is => 'ro', isa => 'Str',  required => 1 );
@@ -46,9 +52,11 @@ sub error_report_name {
 
 sub run {
 	my ($self) = @_;
-	my $gff_parser = Bio::GFFValidator::Parser::Main->new(gff_file => $self->gff_file);
+
 	my @errors_found;
+	my %ids;
 	
+	my $gff_parser = Bio::GFFValidator::Parser::Main->new(gff_file => $self->gff_file);
 	eval {
 		$gff_parser->parse();
 	};
@@ -61,7 +69,7 @@ sub run {
 	
 
 	# Run the tests for each of the features
-	my $arrayref = $gff_parser->features;
+	my $arrayref = $gff_parser->features;	
 	for my $feature (@$arrayref){
 		# ID errors (column 1)
 		
@@ -90,8 +98,36 @@ sub run {
 		# Phase (column 8)
 		my $cdsmissingphase_error = (Bio::GFFValidator::Errors::Phase::CDSFeatureMissingPhaseError->new(feature => $feature))->validate();
 		push(@errors_found, $cdsmissingphase_error);
+		
+		# Attributes (column 9)
+		my %attributes = $self->_get_attributes($feature);
+		for my $tag (keys %attributes){
+			# Only reserved tags can start with capital letters
+			my $nonreservedtagsstartingwithuppercase_error = (Bio::GFFValidator::Errors::Attributes::NonReservedTagsStartingWithUpperCaseError->new(tag => $tag, feature_id => $feature->seq_id))->validate();
+			push(@errors_found, $nonreservedtagsstartingwithuppercase_error);
+			
+			# Some tags are not allowed multiple values
+			if($tag =~ m/ID|Name|Target|Gap/){				
+				my $multiplevalues_error = (Bio::GFFValidator::Errors::Attributes::MultipleValuesError->new(tag => $tag, value => $attributes{$tag}, feature_id => $feature->seq_id))->validate();
+				push(@errors_found, $multiplevalues_error);
+			}
+			
+			
+			if($tag =~ m/ID/){
+				my $value = $attributes{$tag}[0];
+				$ids{$value}++;
+			}
+
+		}
 	}
 	
+	# Check the uniqueness of the IDs for this GFF file	
+	my $idnotunique_error = (Bio::GFFValidator::Errors::Attributes::ID::IDNotUniqueError->new(ids => \%ids))->validate();
+	push(@errors_found, $idnotunique_error);
+	
+	
+	
+	# Handle all the errors found
 	if($self->handler_option == 1){ # Print errors into a report
 		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(errors => \@errors_found,error_report => $self->error_report);
 		$report_printer->print();
@@ -100,6 +136,21 @@ sub run {
 
    return $self;
    
+}
+
+
+# Internal method to extract all the attributes for a given feature
+sub _get_attributes {
+	my ($self, $feature) = @_;
+	my @tags = $feature->get_all_tags();
+	# Creating a tag => value hash
+	my %attributes;
+	for my $tag (@tags){
+		my @values = $feature->each_tag_value($tag);
+		$attributes{$tag} = [@values];
+
+	}
+	return %attributes;
 }
 
 
