@@ -37,15 +37,19 @@ sub validate {
   	$exception_message = $self->exception;
   }
   
+  print STDERR $self->exception." \n";
+  
   
   # Switch behaviour can be unpredictable and there is some talk of it being depracated. So sticking to simple if/else structure below
 
-  if($exception_message =~ m/does not look like GFF3 to me/){
-  	 $self->set_error_message("line_number", "value", "Not a valid GFF3 line as it does not contain 9 tab-delimited values.");
+  if($exception_message =~ m/(\S+) does not look like GFF3 to me/){
+  	 $self->set_error_message("line_number", $1 , "Not a valid GFF3 line as it does not contain 9 tab-delimited values.");
   }elsif($exception_message =~ m/\'\' is not a valid/){
   	 $self->set_error_message("line_number", "value", "Empty fields cannot be left blank. They must have a dot.");
   }elsif($exception_message =~ m/(\S+) is not a valid frame/){
   	 $self->set_error_message("line_number", "value", "$1 is not a valid phase. Should be one of ., 0, 1 or 2");
+  }elsif($exception_message =~ m/Failed validation of sequence/){
+  	 $self->set_error_message("line_number", "value", "Failed to validate sequence. Is there an unescaped > character at the start of a feature line?");
   }else{
   	 $self->set_error_message("line_number", "value", $exception_message); #All Bio Perl errors that we have not dealt with yet
   }
