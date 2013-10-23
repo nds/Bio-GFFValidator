@@ -17,6 +17,7 @@ use Data::Dumper;
 
 use Bio::GFFValidator::Parser::Main;
 use Bio::GFFValidator::Errors::ID::IDFormatError;
+use Bio::GFFValidator::Errors::ID::IDEmptyError;
 use Bio::GFFValidator::Errors::Parser::ParserError;
 use Bio::GFFValidator::Errors::Start_and_End::NotWithinRangeError;
 use Bio::GFFValidator::Errors::Start_and_End::NotPositiveIntegerError;
@@ -68,10 +69,13 @@ sub run {
 	}
 	
 
-	# Run the tests for each of the features
+	# Run the tests for all the features
 	my $arrayref = $gff_parser->features;	
 	for my $feature (@$arrayref){
+	
 		# ID errors (column 1)
+		my $idempty_error = (Bio::GFFValidator::Errors::ID::IDEmptyError->new(feature => $feature))->validate();
+		push(@errors_found, $idempty_error);
 		
 		# Source (column 2)
 		
@@ -125,7 +129,12 @@ sub run {
 	my $idnotunique_error = (Bio::GFFValidator::Errors::Attributes::ID::IDNotUniqueError->new(ids => \%ids))->validate();
 	push(@errors_found, $idnotunique_error);
 	
-	
+	# Create and validate the gene models
+	my $hashref = $gff_parser->gene_models;	
+	for my $prefix (keys %$hashref){
+		print STDERR $prefix." in validator \n";
+
+	}	
 	
 	# Handle all the errors found
 	if($self->handler_option == 1){ # Print errors into a report

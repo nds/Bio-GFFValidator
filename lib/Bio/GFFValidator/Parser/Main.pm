@@ -26,7 +26,7 @@ use Bio::GFFValidator::GeneModel::Gene;
 has 'gff_file'        => ( is => 'ro', isa => 'Str',  required => 1 );
 has 'features'		  => ( is => 'rw', isa => 'ArrayRef');
 has 'seq_regions'	  => ( is => 'rw', isa => 'HashRef' );
-has 'gene_models'	  => ( is => 'rw', isa => 'ArrayRef');
+has 'gene_models'	  => ( is => 'rw', isa => 'HashRef');
 
 
 =head2 parse
@@ -45,6 +45,9 @@ sub parse {
   my ($self) = @_;
   my @array_of_features;
   my %seq_regions;
+  my $current_prefix;
+  my @features_for_gene_model;
+  my %gene_models;
   
   # After many attempts at using Try/Catch, we have resorted to eval for now. Eval has its own issues, so 
   # need to revisit this and think of possible alternative ways that allow us to catch specific exceptions.
@@ -57,35 +60,36 @@ sub parse {
         while(my $feature = $gff_parser->next_feature()) {
          	push(@array_of_features, $feature);
          	
-         	# Also construct the gene models
+         	# Construct the gene models.
+         	# We look ahead in the file and collect all the feature lines that have the same ID/prefix. When the prefix
+         	# changes, we process all the features and try to create a gene model. We assume here that the features are
+         	# ordered by location and hence the components of one gene model are clustered together in the file.
+         	
          	my $type = lc($feature->primary_tag());
-         	my $current_gene;
-         	my $current_prefix; 
-         	my $prefix;   	
-         	if( $type =~ m/gene/ ){ 
-         		($prefix) = $feature->each_tag_value('ID');
-         		if( (not defined $current_gene) or ($current_gene->prefix ne $prefix) ){
-         			# Create a gene feature. Set it to be current gene and its prefix to be current prefix
-         			bless $feature, 'Bio::GFFValidator::GeneModel::Gene';
-         			$current_gene = $feature;
-         			$current_prefix = $current_gene->prefix;
-
-         		
-         		}
-         	
-         	
-         	
-         	}elsif( $type =~ m/transcript/) {
-         	
-         	
-         	
-         	}elsif( $type =~ m/exon|utr|polypeptide/ ) { #Extend this list as other types related to gene models are discovered
-         	
-         	
-         	
+         	if( $type =~ m/gene|mrna|exon|cds|polypeptide|utr/ ){ # Extend this regular expression for other components of a gene/pseudogene model
+         		my ($prefix) = $feature->each_tag_value('ID');
+				$prefix =~ /([^.:]*)/;
+ 				$prefix = $1;
+ 				
+ 				if(defined $prefix and $current_prefix ne $prefix){
+					if(defined $current_prefix){ #If not defined, then it means this is the first line
+						print STDERR "Pushing $current_prefix into hash \n";
+						$gene_models{$current_prefix} = [@features_for_gene_model];
+					}						
+					# Reset values
+					undef @features_for_gene_model; # Clear array and free up any memory it used to hold on to
+					$current_prefix = $prefix;					
+				}
+				
+				push(@features_for_gene_model, $feature);
+   	
          	}
          	
         }
+        
+        # Gather the last gene model
+        print STDERR "Pushing $current_prefix into hash \n";
+        $gene_models{$current_prefix} = [@features_for_gene_model];
         
         # Process the header. Bio perl so far only returns seq region lines
         while(my $seq_region = $gff_parser->next_segment()){
@@ -101,6 +105,7 @@ sub parse {
   	$@->throw;
   }
   
+  $self->gene_models(\%gene_models);
   $self->seq_regions(\%seq_regions);
   $self->features(\@array_of_features);
   
