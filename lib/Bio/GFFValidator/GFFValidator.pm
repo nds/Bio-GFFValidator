@@ -111,7 +111,7 @@ sub run {
 			push(@errors_found, $nonreservedtagsstartingwithuppercase_error);
 			
 			# Some tags are not allowed multiple values
-			if($tag =~ m/ID|Name|Target|Gap/){			
+			if($tag =~ m/ID|Name|Target|Gap|Parent/){			
 				my $multiplevalues_error = (Bio::GFFValidator::Errors::Attributes::MultipleValuesError->new(tag => $tag, tag_values => $attributes{$tag}, feature_id => $feature->seq_id))->validate();
 				push(@errors_found, $multiplevalues_error);
 			}
@@ -132,7 +132,8 @@ sub run {
 	# Create and validate the gene models
 	my $hashref = $gff_parser->gene_models;	
 	for my $prefix (keys %$hashref){
-		print STDERR $prefix." in validator \n";
+		# Send to gene model builder
+		print STDERR "$prefix in validator \n";
 
 	}	
 	
