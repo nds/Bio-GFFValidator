@@ -33,118 +33,117 @@ sub build {
 	  my @utrs;
 	  
 	  for my $feature (@{$self->features}){
-	  		my $tag = lc($feature->primary_tag);\
+	  		my $tag = lc($feature->primary_tag);
 	  		
 	  		#TODO: Improve this code to reduce repetition
 	  		
 	  		if($tag =~ /gene/){
+	  			# Check that only gene is present
 	  			$gene = Bio::GFFValidator::GeneModel::Gene->new( name=>($self->_get_name($feature)),
 	  															 start=>$feature->start,
 	  															 end=>$feature->end,
 	  															 strand=>$feature->strand,
 	  															 phase=>$feature->phase );
 	  		}elsif($tag =~ /mrna/){ # All other types of rna should also be here
-	  			my $transcript = Bio::GFFValidator::GeneModel::Transcript->new( name=>($self->_get_name($feature)),
+	  			my $transcript_feature = Bio::GFFValidator::GeneModel::Transcript->new( name=>($self->_get_name($feature)),
 	  															 				start=>$feature->start,
 	  															 				end=>$feature->end,
 	  															 				strand=>$feature->strand,
-	  															 				phase=>$feature->phase 
+	  															 				phase=>$feature->phase, 
 	  															 				parent=>($self->_get_parent($feature)) );
-	  			push(@transcripts, $transcript);
+	  			push(@transcripts, $transcript_feature);
 	  		
 	  		}elsif($tag =~ /cds/){
-	  			my $exon = Bio::GFFValidator::GeneModel::Exon->new( name=>($self->_get_name($feature)),
+	  			my $exon_feature = Bio::GFFValidator::GeneModel::Exon->new( name=>($self->_get_name($feature)),
 	  															 	start=>$feature->start,
 	  															 	end=>$feature->end,
 	  															 	strand=>$feature->strand,
-	  															 	phase=>$feature->phase 
+	  															 	phase=>$feature->phase, 
 	  															 	parent=>($self->_get_parent($feature)) );
-	  			push(@exons, $exon);
+	  			push(@exons, $exon_feature);
 	  		
 	  		}elsif($tag =~ /polypeptide/){
-	  			my $polypeptide = Bio::GFFValidator::GeneModel::Polypeptide->new( name=>($self->_get_name($feature)),
+	  			my $polypeptide_feature = Bio::GFFValidator::GeneModel::Polypeptide->new( name=>($self->_get_name($feature)),
 	  															 				  start=>$feature->start,
 	  															 				  end=>$feature->end,
 	  															 				  strand=>$feature->strand,
-	  															 				  phase=>$feature->phase 
+	  															 				  phase=>$feature->phase, 
 	  															 				  parent=>($self->_get_parent($feature)) );
-	  			push(@polypeptides, $polypeptide);
+	  			push(@polypeptides, $polypeptide_feature);
 	  		
 	  		
 	  		}elsif($tag =~ /utr/){
-	  			my $utr = Bio::GFFValidator::GeneModel::UTR->new( name=>($self->_get_name($feature)),
+	  			my $utr_feature = Bio::GFFValidator::GeneModel::UTR->new( name=>($self->_get_name($feature)),
 	  															 				  start=>$feature->start,
 	  															 				  end=>$feature->end,
 	  															 				  strand=>$feature->strand,
-	  															 				  phase=>$feature->phase 
+	  															 				  phase=>$feature->phase, 
 	  															 				  parent=>($self->_get_parent($feature)) );
-	  			push(@utrs, $utr);
+	  			push(@utrs, $utr_feature);
 	  		}
+	  	}
 	  		
-	  		# Could possibly do some error checking here like if they are all on the same strand, but for now we have refrained from doing so
-	  		# for ease of maintainability. All gene model checks are called by the GFFValidator.pm module
+	  	# Could possibly do some error checking here like if they are all on the same strand, but for now we have refrained from doing so
+	  	# for ease of maintainability. All gene model checks are called by the GFFValidator.pm module
 	  		
-	  		if(defined $gene){
-	  			# For every transcript, attach its 'children'. When done, attach transcript to the gene
-	  			for my $transcript (@transcripts){
-	  				#Exons
-	  				for my $exon (@exons) {
-	  					if($exon->parent eq $transcript->name){
-	  						$transcript->add_exon($exon);
-	  					}else{
-	  						push(@{$self->dangling_features},$exon);
-	  					}	  				
-	  				}
-	  				
-	  				#Polypeptides
-	  				for my $polypeptide (@polypeptides) {
-	  					if($polypeptide->parent eq $transcript->name){
-	  						$transcript->add_polypeptide($polypeptide);
-	  					}else{
-	  						push(@{$self->dangling_features},$polypeptide);
-	  					}	  				
-	  				}
-	  			
-	  				#UTRs
-	  				for my $utr (@utrs) {
-	  					if($utr->parent eq $transcript->name){
-	  						$transcript->add_utr($utr);
-	  					}else{
-	  						push(@{$self->dangling_features},$polypeptide);
-	  					}	  				
-	  				}
-	  				
-	  				# Attach transcript
-					if($transcript->parent eq $gene->name){
-						$gene->add_transcript($transcript);
-					}else{
-						push(@{$self->dangling_features},$transcript);
-					}
+	  	if(defined $gene){
+	  		# For every transcript, attach its 'children'. When done, attach transcript to the gene
+	  		for my $transcript (@transcripts){
+	  			#Exons
+	  			for my $exon (@exons) {
+	  				if($exon->parent eq $transcript->name){
+	  					$transcript->add_exon($exon);
+	  				}else{
+	  					push(@{$self->dangling_features},$exon);
+	  				}	  				
 	  			}
-	  		
-	  		
-	  		
-	  		
+	  				
+	  			#Polypeptides
+	  			for my $polypeptide (@polypeptides) {
+	  				if($polypeptide->parent eq $transcript->name){
+	  					$transcript->add_polypeptide($polypeptide);
+	  				}else{
+	  					push(@{$self->dangling_features},$polypeptide);
+	  				}	  				
+	  			}
+	  			
+	  			#UTRs
+	  			for my $utr (@utrs) {
+	  				if($utr->parent eq $transcript->name){
+	  					$transcript->add_utr($utr);
+	  				}else{
+	  					push(@{$self->dangling_features},$utr);
+	  				}	  				
+	  			}
+	  				
+	  			# Attach transcript
+				if($transcript->parent eq $gene->name){
+					$gene->add_transcript($transcript);
+				}else{
+					push(@{$self->dangling_features},$transcript);
+				}
 	  		}
+	  	}
 	  
+	return $self; 
 	  
-	  
-	  
-	  }
 }
 
 sub _get_name {
 	# Get the name of the feature (i.e. the value of the ID column)
+	my ($self, $feature) = @_;
 	my ($ID) = $feature->each_tag_value('ID');
 	return $ID;
 }
 
 sub _get_parent {
 	# Get the parent of the feature
+	my ($self, $feature) = @_;
+	my $parent;
 	if(lc($feature->primary_tag) eq "polypeptide"){
-		my ($parent) = $feature->each_tag_value('Derives_from');
+		($parent) = $feature->each_tag_value('Derives_from');
 	}else{
-		my ($parent) = $feature->each_tag_value('Parent');
+		($parent) = $feature->each_tag_value('Parent');
 	}
 	 
 	return $parent;
