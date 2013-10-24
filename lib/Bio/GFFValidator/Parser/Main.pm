@@ -45,7 +45,7 @@ sub parse {
   my ($self) = @_;
   my @array_of_features;
   my %seq_regions;
-  my $current_prefix;
+  my $current_prefix = "";
   my @features_for_gene_model;
   my %gene_models;
   
@@ -67,13 +67,12 @@ sub parse {
          	
          	my $type = lc($feature->primary_tag());
          	if( $type =~ m/gene|mrna|exon|cds|polypeptide|utr/ ){ # Extend this regular expression for other components of a gene/pseudogene model
-         		my ($prefix) = $feature->each_tag_value('ID');
-				$prefix =~ /([^.:]*)/;
- 				$prefix = $1;
+         		my ($ID) = $feature->each_tag_value('ID');
+				$ID =~ /([^.:]*)/;
+ 				my $prefix = $1;
  				
  				if(defined $prefix and $current_prefix ne $prefix){
-					if(defined $current_prefix){ #If not defined, then it means this is the first line
-						print STDERR "Pushing $current_prefix into hash \n";
+					if($current_prefix ne ""){ #If not equal to "", then it means this is not the first line
 						$gene_models{$current_prefix} = [@features_for_gene_model];
 					}						
 					# Reset values
@@ -88,10 +87,9 @@ sub parse {
         }
         
         # Gather the last gene model
-        print STDERR "Pushing $current_prefix into hash \n";
         $gene_models{$current_prefix} = [@features_for_gene_model];
         
-        # Process the header. Bio perl so far only returns seq region lines
+        # Process the header. Bio perl so far only returns seq region lines. TODO: Investigate if comments and other directives can be extracted using Bio Perl
         while(my $seq_region = $gff_parser->next_segment()){
         	$seq_regions{$seq_region->id} = [$seq_region->start, $seq_region->end];
         

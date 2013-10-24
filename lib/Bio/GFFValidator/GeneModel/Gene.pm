@@ -3,7 +3,7 @@ package Bio::GFFValidator::GeneModel::Gene;
 
 =head1 SYNOPSIS
 
-A Gene class to help us keep hold of genes together with links to their transcripts
+A Gene class to store information about a gene
 
 =method 
 
@@ -11,18 +11,19 @@ A Gene class to help us keep hold of genes together with links to their transcri
 =cut
 
 use Moose;
-use Data::Dumper;
-
-extends "Bio::SeqFeature::Generic";
 
 has 'transcripts'        => ( is => 'rw', isa => 'ArrayRef');
-has 'prefix'			 => ( is => 'rw', isa => 'Str', lazy => 1, builder => '_build_prefix' );
+has 'name'				 => ( is => 'rw', isa => 'Str'     ); # Name of the gene
+has 'start'			     => ( is => 'rw', isa => 'Str'     );
+has 'end'				 => ( is => 'rw', isa => 'Str'     );
+has 'strand'			 => ( is => 'rw', isa => 'Str'     );
+has 'phase'				 => ( is => 'rw', isa => 'Str'     );
 
-sub _build_prefix {	
-	# For a gene line in a GFF file, this would be the gene's ID (name)
-	my ($self) = @_;
-	my @values = $self->each_tag_value('ID');
-	return $values[0]; #This assumes there is one and only one value for ID. Need to verify this is the case
+
+sub add_transcript {	
+	 my ($self, $transcript) = @_;
+	 push ( @{$self->transcripts}, $transcript);
+	 return $self;	
 }
 
 
