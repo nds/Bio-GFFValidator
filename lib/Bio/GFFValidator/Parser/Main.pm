@@ -16,7 +16,7 @@ Parses a GFF file using Bio Perl and creates three arrays: one of feature object
 use Moose;
 use Bio::Tools::GFF;
 use Bio::LocatableSeq;
-use Bio::GFFValidator::GeneModel::Gene;
+use Bio::GFFValidator::GeneModel::GeneModelBuilder
 
 #use Bio::Root::Exception;
 #use Error qw(:try); # Moose exports a keyword called with which clashes with Error's. This returns a prototype mismatch error
@@ -26,7 +26,7 @@ use Bio::GFFValidator::GeneModel::Gene;
 has 'gff_file'        => ( is => 'ro', isa => 'Str',  required => 1 );
 has 'features'		  => ( is => 'rw', isa => 'ArrayRef');
 has 'seq_regions'	  => ( is => 'rw', isa => 'HashRef' );
-has 'gene_models'	  => ( is => 'rw', isa => 'HashRef');
+has 'gene_models'	  => ( is => 'rw', isa => 'ArrayRef');
 
 
 =head2 parse
@@ -73,7 +73,9 @@ sub parse {
  				
  				if(defined $prefix and $current_prefix ne $prefix){
 					if($current_prefix ne ""){ #If not equal to "", then it means this is not the first line
-						$gene_models{$current_prefix} = [@features_for_gene_model];
+# 						$gene_models{$current_prefix} = [@features_for_gene_model];
+						my $gene_model = (Bio::GFFValidator::GeneModel::GeneModelBuilder->new(features => @features_for_gene_model))->build();
+						push(@{$self->gene_models},$gene_model);
 					}						
 					# Reset values
 					undef @features_for_gene_model; # Clear array and free up any memory it used to hold on to
@@ -87,7 +89,9 @@ sub parse {
         }
         
         # Gather the last gene model
-        $gene_models{$current_prefix} = [@features_for_gene_model];
+#         $gene_models{$current_prefix} = [@features_for_gene_model];
+		my $gene_model = (Bio::GFFValidator::GeneModel::GeneModelBuilder->new(features => @features_for_gene_model))->build();
+		push(@{$self->gene_models},$gene_model);
         
         # Process the header. Bio perl so far only returns seq region lines. TODO: Investigate if comments and other directives can be extracted using Bio Perl
         while(my $seq_region = $gff_parser->next_segment()){
@@ -103,7 +107,7 @@ sub parse {
   	$@->throw;
   }
   
-  $self->gene_models(\%gene_models);
+#   $self->gene_models(\%gene_models);
   $self->seq_regions(\%seq_regions);
   $self->features(\@array_of_features);
   

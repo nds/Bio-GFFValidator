@@ -130,10 +130,9 @@ sub run {
 	push(@errors_found, $idnotunique_error);
 	
 	# Create and validate the gene models
-	my $hashref = $gff_parser->gene_models;	
-	for my $prefix (keys %$hashref){
+	for my $gene_model (@{$gff_parser->gene_models}){
 		# Send to gene model builder
-		print STDERR "$prefix in validator \n";
+		print STDERR $gene_model->gene->name." is the gene name \n";
 
 	}	
 	
