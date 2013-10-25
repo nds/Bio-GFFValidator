@@ -16,7 +16,6 @@ has 'name'				 => ( is => 'rw', isa => 'Str'     ); # Name of the UTR
 has 'start'			     => ( is => 'rw', isa => 'Str'     );
 has 'end'				 => ( is => 'rw', isa => 'Str'     );
 has 'strand'			 => ( is => 'rw', isa => 'Str'     );
-has 'phase'				 => ( is => 'rw', isa => 'Str'     );
 has 'parent'			 => ( is => 'rw', isa => 'Str'     );
 
 

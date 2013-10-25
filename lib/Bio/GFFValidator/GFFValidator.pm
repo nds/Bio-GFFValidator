@@ -29,6 +29,7 @@ use Bio::GFFValidator::Errors::Attributes::NonReservedTagsStartingWithUpperCaseE
 use Bio::GFFValidator::Errors::Attributes::ValueEmptyError;
 use Bio::GFFValidator::Errors::Attributes::ID::IDNotUniqueError;
 use Bio::GFFValidator::Errors::Attributes::MultipleValuesError;
+use Bio::GFFValidator::Errors::GeneModel::GeneModelErrors;
 use Bio::GFFValidator::ErrorHandlers::PrintReport;
 
 
@@ -129,10 +130,15 @@ sub run {
 	my $idnotunique_error = (Bio::GFFValidator::Errors::Attributes::ID::IDNotUniqueError->new(ids => \%ids))->validate();
 	push(@errors_found, $idnotunique_error);
 	
-	# Create and validate the gene models
+	# Validate the gene models
 	for my $gene_model (@{$gff_parser->gene_models}){
-		# Send to gene model builder
-		print STDERR $gene_model->gene->name." is the gene name \n";
+		my $genemodel_error = (Bio::GFFValidator::Errors::GeneModel::GeneModelErrors->new(gene_model => $gene_model))->validate();
+		push(@errors_found, $genemodel_error);
+	
+		
+	# 	if($gene_model->gene){
+# 			print STDERR $gene_model->gene->name." is the gene name \n";
+# 		}
 
 	}	
 	

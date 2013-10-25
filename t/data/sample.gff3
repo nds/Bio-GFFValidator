@@ -1,8 +1,9 @@
 ##gff-version 3
 ##sequence-region	ctg123	1	9000       
-ctg123	chado	.	1000	9000	.	+	.	ID=gene00001;Name=EDEN
-ctg123	chado	TF_binding_site	1000	1012	.	-	0	ID=tfbs00001;Parent=gene00001
-ctg123	chado	mRNA	1050	9000	.	+	1	ID=mRNA00001;Parent=gene00001;Name=EDEN.1
-ctg123	chado	CDS	1050	9000	.	+	1	ID=gene00001.exon;Parent=mRNA00001
+ctg123	chado	gene	1000	9000	.	+	.	ID=gene00001;Name=EDEN;tag=value
+ctg123	chado	TF_binding_site	1000	1012	.	-	0	ID=tfbs00001;Parent=gene00001;Emptytag=
+ctg123	chado	mRNA	1050	9001	.	+	1	ID=gene00001.1;Parent=gene00001;Name=EDEN.1
+ctg123	chado	CDS	1050	9000	.	+	1	ID=gene00001:exon;Parent=gene00001.1
+ctg123	chado	mRNA	1050	9000	.	+	1	ID=gene00002.1;Parent=gene00002;Name=EDEN.1
 ##FASTA
 #comment
