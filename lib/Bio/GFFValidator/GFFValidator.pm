@@ -1,9 +1,15 @@
 package Bio::GFFValidator::GFFValidator;
+
 # ABSTRACT: Validates a given GFF file and produces an error report
 
 =head1 SYNOPSIS
 
-Runs the validation checks on the feature objects and gene models produced by the parser
+Passes the GFF file into the parser module and receives a set of features and gene models. These are then passed into the appropriate validator checks.
+Any errors found are passed to the Error Handlers.
+
+my $gff_validator = Bio::GFFValidator::GFFValidator->new(
+   gff_file =>  't/data/sample.gff3');
+$gff_validator->run();
 
 =head1 SEE ALSO
 
@@ -13,7 +19,7 @@ Runs the validation checks on the feature objects and gene models produced by th
 
 use Moose;
 use Cwd;
-use Data::Dumper;
+use File::Basename;
 
 use Bio::GFFValidator::Parser::Main;
 use Bio::GFFValidator::Errors::ID::IDFormatError;
@@ -33,24 +39,16 @@ use Bio::GFFValidator::Errors::GeneModel::GeneModelErrors;
 use Bio::GFFValidator::ErrorHandlers::PrintReport;
 
 
-
-
 has 'gff_file'        => ( is => 'ro', isa => 'Str',  required => 1 );
-has 'error_report'	  => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_report' );
-has 'handler_option'  => ( is => 'ro', isa => 'Num', default => 1); # 1 - print errors in a report, 2 - print a summary, 3 - fix errors
-has 'errors'		  => ( is => 'rw', isa => 'ArrayRef' );
+has 'error_report'	  => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_report' ); #Default to a file named with the gff filename + ERROR_REPORT.txt
+has 'handler_option'  => ( is => 'ro', isa => 'Num', default => 1); # 1 - print errors in a report, 2 - print a summary, 3 - fix errors (not implemented yet)
 
 
 sub _build_error_report {
   my ($self) = @_;
-  return getcwd()."/ERROR_REPORT.txt"; #Include gff file name and date
+  return getcwd()."/".basename($self->gff_file).".ERROR_REPORT.txt"; 
 }
 
-sub error_report_name {
-  my ($self) = @_;
-  return $self->error_report;
-
-}
 
 sub run {
 	my ($self) = @_;
@@ -58,19 +56,23 @@ sub run {
 	my @errors_found;
 	my %ids;
 	
+		
+	# Parse the GFF file. 
+	# Catch errors thrown by the Bio Perl parser. Bio Perl still dies whenever an error is found, even though we try to catch it.
+	# TODO: Do some monkey patching of Bio::Root::Exception to see if this can be fixed
+	
 	my $gff_parser = Bio::GFFValidator::Parser::Main->new(gff_file => $self->gff_file);
+	local $@;
 	eval {
 		$gff_parser->parse();
 	};
-	
-	# Catch errors thrown by the Bio Perl parser. This still dies - do some monkey patching of Bio::Root::Exception!!!
+
 	if(my $exception = $@){ 
 		my $parser_errors = (Bio::GFFValidator::Errors::Parser::ParserError->new(exception => $exception))->validate();
 		push(@errors_found, $parser_errors);
 	}
 	
-
-	# Run the tests for all the features
+	# Run the tests for all the features returned by the parser
 	my $arrayref = $gff_parser->features;	
 	for my $feature (@$arrayref){
 	
@@ -134,19 +136,18 @@ sub run {
 	for my $gene_model (@{$gff_parser->gene_models}){
 		my $genemodel_error = (Bio::GFFValidator::Errors::GeneModel::GeneModelErrors->new(gene_model => $gene_model))->validate();
 		push(@errors_found, $genemodel_error);
-	
-		
-	# 	if($gene_model->gene){
-# 			print STDERR $gene_model->gene->name." is the gene name \n";
-# 		}
-
 	}	
 	
 	# Handle all the errors found
 	if($self->handler_option == 1){ # Print errors into a report
-		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(errors => \@errors_found,error_report => $self->error_report);
+		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(gff_file => $self->gff_file, errors => \@errors_found, error_report => $self->error_report);
 		$report_printer->print();
-	} # Else, print summary or get the validator to fix errors 
+	}else{
+	
+	 # Else, print summary (if option 2) or get the validator to fix errors (if option 3)
+	 # Both these not yet implemented
+	 
+	}
 	
 
    return $self;
