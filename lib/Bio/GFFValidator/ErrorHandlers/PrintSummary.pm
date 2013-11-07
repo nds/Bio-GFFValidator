@@ -3,7 +3,7 @@ package Bio::GFFValidator::ErrorHandlers::PrintSummary;
 
 =head1 SYNOPSIS
 
-Given an array ref of errors, this prints out a summary
+Given an array ref of errors, this prints out a summary into a summary file
 
 =method 
 
@@ -15,31 +15,27 @@ Given an array ref of errors, this prints out a summary
 use Moose;
 
 
-
+has 'gff_file'				=> ( is => 'ro', isa => 'Str', 	required => 1);
 has 'errors'        		=> ( is => 'ro', isa => 'ArrayRef',  required => 1 );
-has 'error_summary_report'	=> ( is => 'ro', isa => 'Str', 	lazy => 1,	 builder => '_build_output_filename' );
-
-
-sub _build_output_filename {
-  my ($self) = @_;
-  return getcwd()."/ERROR_SUMMARY_REPORT.txt";
-}
-
+has 'error_summary_report'	=> ( is => 'ro', isa => 'Str', 	required => 1 );
 
 sub print {
 
   my ($self) = @_;
   
-  # Fill in
+  open(my $fh, ">", $self->error_summary_report) or die "Cannot open $self->error_summary_report: $!";
+  my $date = Time::Piece->new->strftime('%d/%m/%Y');
+  my $time = localtime;
+
+  # Print header of file
+  print $fh "~~ Error summary report for ".$self->gff_file." ~~ \n";
+  print $fh "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
+  print $fh "\n\n";
+  print $fh scalar @{$self->errors}." errors found in file. \n"; #TODO: Add the code to print a proper summary including a count of the various types of errors  
+  close($fh);
   
   return $self
   
-}
-
-sub error_summary_report_name {
-	my ($self) = @_;
-	return $self->error_summary_report;
-
 }
 
 
@@ -48,3 +44,5 @@ sub error_summary_report_name {
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
+
+
