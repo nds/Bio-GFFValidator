@@ -37,9 +37,9 @@ sub print {
   print STDERR "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
   
   for my $error (@ {$self->errors} ){
-  	  	if($error->triggered){
-  		print $fh $error->get_error_message;
-  		print STDERR $error->get_error_message; # Delete
+  	 if($error->triggered){
+  		print $fh $error->get_error_message,"\n";
+  		print STDERR $error->get_error_message,"\n"; # Delete
   	}  
   }
   
