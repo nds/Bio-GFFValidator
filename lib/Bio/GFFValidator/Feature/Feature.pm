@@ -11,24 +11,22 @@ A Feature class to manipulate the features returned by the Bio Perl parser
 =cut
 
 use Moose;
+use Bio::SeqFeatureI;
 
-# use Bio::SeqFeature::Generic;
+has 'feature'   	=> ( is => 'ro', isa => 'Bio::SeqFeatureI', required => 1 ); #The feature object
 
-has 'feature'  			 => ( is => 'ro' , isa => 'Str', required => 1); # Feature object returned by Bio Perl parser
+sub get_attributes_for_feature {
+	my ($self) = @_;
+ 	my @tags = ($self->feature)->get_all_tags();
+	# Creating a tag => value hash
+ 	my %attributes;
+	for my $tag (@tags){
+		my @values = ($self->feature)->get_tag_values($tag);
+		$attributes{$tag} = [@values];
 
-# sub get_attributes_for_feature {
-# 	my ($self) = @_;
-# # 	my @tags = ($self->feature)->get_all_tags();
-# 	# Creating a tag => value hash
-#  	my %attributes;
-# 	for my $tag (@tags){
-# 		print STDERR "$tag is tag \n";
-# 		my @values = ($self->feature)->get_tag_values($tag);
-# 		$attributes{$tag} = [@values];
-# 
-# 	}
-# 	return %attributes;
-# }
+	}
+	return %attributes;
+}
 
 
 no Moose;

@@ -22,6 +22,7 @@ use Cwd;
 use File::Basename;
 
 use Bio::GFFValidator::Parser::Main;
+use Bio::GFFValidator::Feature::Feature;
 use Bio::GFFValidator::Errors::ID::IDFormatError;
 use Bio::GFFValidator::Errors::ID::IDEmptyError;
 use Bio::GFFValidator::Errors::Parser::ParserError;
@@ -107,7 +108,7 @@ sub run {
 		push(@errors_found, $cdsmissingphase_error);
 		
 		# Attributes (column 9)
-		my %attributes = $self->_get_attributes($feature);
+		my %attributes = (Bio::GFFValidator::Feature::Feature->new(feature => $feature))->get_attributes_for_feature();
 		for my $tag (keys %attributes){
 			# Only reserved tags can start with capital letters
 			my $nonreservedtagsstartingwithuppercase_error = (Bio::GFFValidator::Errors::Attributes::NonReservedTagsStartingWithUpperCaseError->new(tag => $tag, feature_id => $feature->seq_id))->validate();
@@ -152,21 +153,6 @@ sub run {
 
    return $self;
    
-}
-
-
-# Internal method to extract all the attributes for a given feature
-sub _get_attributes {
-	my ($self, $feature) = @_;
-	my @tags = $feature->get_all_tags();
-	# Creating a tag => value hash
-	my %attributes;
-	for my $tag (@tags){
-		my @values = $feature->each_tag_value($tag);
-		$attributes{$tag} = [@values];
-
-	}
-	return %attributes;
 }
 
 
