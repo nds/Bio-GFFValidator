@@ -33,7 +33,7 @@ sub set_error_message {
 
 sub get_error_message {
 	my ($self) = @_;
-	return $self->line_number.": ".$self->value.": ".$self->message."\n";
+	return $self->line_number.": ".$self->value.": ".$self->message;
 }
 
 
