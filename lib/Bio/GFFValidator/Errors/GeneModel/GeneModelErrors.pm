@@ -21,26 +21,24 @@ has 'gene_model'   	=> ( is => 'ro', isa => 'Bio::GFFValidator::GeneModel::GeneM
 
 sub validate {
 	
-	# We do several gene model checks here. An alternative would be to have separated them out into classes. However, there are checks that can be done together
-	# when parsing the gene model and this was considered more efficient
+	# We do several gene model checks here. An alternative would be to have separated them out into classes. However, there are several checks that can be done together by parsing
+	# the gene model just once and this was considered more efficient
 	
 	my ($self) = @_;
-	my $error_message; # TODO: Format this error message better or can you throw several errors
+	my $error_message = ''; 
+	
 	
 	# Gene model complete? check. If there are any dangling features, we list them 
 	if(@{$self->gene_model->dangling_features}){
-		$error_message = $error_message."The following features cannot be attached to a gene model: ".join(", ", @{$self->gene_model->dangling_features})."\n";
+		$error_message = $self->_concat_to_error_message($error_message, "The following features cannot be attached to a gene model: ".join(", ", @{$self->gene_model->dangling_features}));
 	
 	}
 	
 	# Are all the feature boundaries within their parent features?
 	if(@{$self->gene_model->overhanging_features}){
-		$error_message = $error_message."The following features are outside the boundaries of the gene/transcript: ".join(", ", @{$self->gene_model->overhanging_features})."\n";
+		$error_message = $self->_concat_to_error_message($error_message, "The following features are outside the boundaries of the gene/transcript: ".join(", ", @{$self->gene_model->overhanging_features}));
 	
 	}
-	
-	
-	
 	
 	# Set the error message
 	if($error_message){
@@ -53,6 +51,23 @@ sub validate {
 sub fix_it {
 
 }
+
+sub _concat_to_error_message {
+	# TODO: Consider an alternative to creating this rather complicated error message
+	
+	my ($self, $existing_message, $new_message) = @_;
+	my $spacer;
+	if($existing_message eq ''){
+		$spacer = ''; # Don't intend the first message
+	}else{
+		$spacer = " " x 18;
+	}
+	return $existing_message.$spacer.$new_message."\n";
+
+}	
+
+
+
 
 
 
