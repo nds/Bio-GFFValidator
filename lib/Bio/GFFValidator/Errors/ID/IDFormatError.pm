@@ -3,7 +3,8 @@ package Bio::GFFValidator::Errors::ID::IDFormatError;
 
 =head1 SYNOPSIS
 
-Checks the ID (column 1) of the feature adheres to the right format
+Checks the ID (column 1) of the feature does not contain an unescaped > at the start
+NOTE: This error is caught by the Bio Perl parser and so we do not make use of this object
 
 =method 
 
@@ -21,7 +22,7 @@ sub validate {
 	my ($self) = @_;
 	if($self->id){
 		if($self->id =~ /^\>/){
-			$self->set_error_message("line_number", $self->id, "ID contains an unescaped > symbol at the start");
+			$self->set_error_message("line_number", "", "ID contains an unescaped > symbol at the start");
 		}
 		
 	}
