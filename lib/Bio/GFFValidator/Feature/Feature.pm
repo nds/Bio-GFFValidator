@@ -30,7 +30,7 @@ sub get_attributes_for_feature {
 }
 
 # Returns the value of the ID tag 
-sub get_feature_id {
+sub get_feature_ID {
 	my ($self) = @_;
  	my @values = ($self->feature)->get_tag_values('ID');
 	if((scalar @values) != 1){
