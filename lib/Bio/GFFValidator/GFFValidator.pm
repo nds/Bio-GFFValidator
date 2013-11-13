@@ -152,17 +152,22 @@ sub run {
 		if($genemodel_error->triggered) { push(@errors_found, $genemodel_error); }
 	}	
 	
+	#-----------------------------
 	# Handle all the errors found
-	if($self->handler_option == 1){ # Print errors into a report
-		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(gff_file => $self->gff_file, errors => \@errors_found, error_report => $self->error_report);
-		$report_printer->print();
-	}elsif($self->handler_option == 2){
-		my $summary_printer = Bio::GFFValidator::ErrorHandlers::PrintSummary->new(gff_file => $self->gff_file, errors => \@errors_found, error_summary_report => $self->error_summary_report);
-		$summary_printer->print();
-	}elsif($self->handler_option == 3) { #Get the validator to fix errors (if option 3)
-	 
-	 	# not yet implemented
-	 
+	#-----------------------------
+	if(@errors_found){
+	
+		$self->status(1); #True
+	
+		if($self->handler_option == 1 ){ # Print errors into a report
+			my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(gff_file => $self->gff_file, errors => \@errors_found, error_report => $self->error_report);
+			$report_printer->print();
+		}elsif($self->handler_option == 2){
+			my $summary_printer = Bio::GFFValidator::ErrorHandlers::PrintSummary->new(gff_file => $self->gff_file, errors => \@errors_found, error_summary_report => $self->error_summary_report);
+			$summary_printer->print();
+		}elsif($self->handler_option == 3) { #Get the validator to fix errors (if option 3)	 
+	 		# not yet implemented
+		}
 	}
 	
 
