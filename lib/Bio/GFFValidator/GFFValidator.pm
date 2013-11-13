@@ -45,6 +45,7 @@ has 'gff_file'                => ( is => 'ro', isa => 'Str',  required => 1 );
 has 'error_report'	          => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_report' ); #Default to a file named with the gff filename + ERROR_REPORT.txt
 has 'error_summary_report'	  => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_summary_report' ); #Default to a file named with the gff filename + ERROR_SUMMARY_REPORT.txt
 has 'handler_option'          => ( is => 'ro', isa => 'Num', default => 1); # 1 - print errors in a report, 2 - print a summary, 3 - fix errors (not implemented yet)
+has 'status'                  => ( is => 'rw', isa => 'Bool', default => 0); # 0 - No errors found, 1 - Errors found
 
 
 sub _build_error_report {
@@ -63,11 +64,9 @@ sub run {
 	my @errors_found;
 	my %ids;
 	
-		
 	# Parse the GFF file. 
 	# Catch errors thrown by the Bio Perl parser. Bio Perl still dies whenever an error is found, even though we try to catch it.
 	# TODO: Do some monkey patching of Bio::Root::Exception to see if this can be fixed
-	
 	my $gff_parser = Bio::GFFValidator::Parser::Main->new(gff_file => $self->gff_file);
 	local $@;
 	eval {
@@ -149,10 +148,10 @@ sub run {
 	if($self->handler_option == 1){ # Print errors into a report
 		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(gff_file => $self->gff_file, errors => \@errors_found, error_report => $self->error_report);
 		$report_printer->print();
-	}elsif($self->handler_option == 2)){
+	}elsif($self->handler_option == 2){
 		my $summary_printer = Bio::GFFValidator::ErrorHandlers::PrintSummary->new(gff_file => $self->gff_file, errors => \@errors_found, error_summary_report => $self->error_summary_report);
-		$report_printer->print();
-	}elsif($self->handler_option == 3)) { #Get the validator to fix errors (if option 3)
+		$summary_printer->print();
+	}elsif($self->handler_option == 3) { #Get the validator to fix errors (if option 3)
 	 
 	 	# not yet implemented
 	 
