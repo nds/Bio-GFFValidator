@@ -27,7 +27,7 @@ sub validate {
  	# It can, however, have a . which is equivalent to an empty value
  	
 	if(not defined $id or $id eq '.'){
-		$self->set_error_message("line_number", $self->feature->seq_id, "ID column cannot be empty" );	
+		$self->set_error_message("line_number", "" , "ID column cannot be empty" );	
 	}
 		
 	return $self;
