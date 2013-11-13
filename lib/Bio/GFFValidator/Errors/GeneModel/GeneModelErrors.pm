@@ -28,7 +28,7 @@ sub validate {
 	my $error_message = ''; 
 	
 	
-	# Gene model complete? check. If there are any dangling features, we list them 
+	# Gene model complete check. If there are any dangling features, we list them 
 	if(@{$self->gene_model->dangling_features}){
 		$error_message = $self->_concat_to_error_message($error_message, "The following features cannot be attached to a gene model: ".join(", ", @{$self->gene_model->dangling_features}));
 	
@@ -42,6 +42,7 @@ sub validate {
 	
 	# Set the error message
 	if($error_message){
+		# We use the gene model prefix as the value for these errors (not the feature ID)
 		$self->set_error_message("line_number", $self->gene_model->prefix."(prefix)", $error_message );	
 	}
 	return $self;
