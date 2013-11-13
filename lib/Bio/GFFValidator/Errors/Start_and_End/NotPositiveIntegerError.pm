@@ -27,7 +27,7 @@ sub validate {
 	
 	# Are the start and end values positive integers?
 	if($start < 0 or $end < 0 or $start =~ /\D/ or $end =~ /\D/){
-		$self->set_error_message("line_number", $self->feature->seq_id, "Start and end should be positive integers" );	
+		$self->set_error_message("line_number", "", "Start and end values should be positive integers" );	
 	}
 	
 	return $self;
