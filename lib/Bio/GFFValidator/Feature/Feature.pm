@@ -3,7 +3,7 @@ package Bio::GFFValidator::Feature::Feature;
 
 =head1 SYNOPSIS
 
-A Feature class to manipulate the features returned by the Bio Perl parser
+A Feature class to extract certain bits of information from the features returned by the Bio Perl parser
 
 =method 
 
@@ -15,6 +15,7 @@ use Bio::SeqFeatureI;
 
 has 'feature'   	=> ( is => 'ro', isa => 'Bio::SeqFeatureI', required => 1 ); #The feature object
 
+# Returns all the key-value pairs in the 9th column 
 sub get_attributes_for_feature {
 	my ($self) = @_;
  	my @tags = ($self->feature)->get_all_tags();
@@ -27,6 +28,18 @@ sub get_attributes_for_feature {
 	}
 	return %attributes;
 }
+
+# Returns the value of the ID tag 
+sub get_feature_id {
+	my ($self) = @_;
+ 	my @values = ($self->feature)->get_tag_values('ID');
+	if((scalar @values) != 1){
+		return "Can't locate ID";
+	}else{
+		return $values[0];
+	}
+}
+
 
 
 no Moose;
