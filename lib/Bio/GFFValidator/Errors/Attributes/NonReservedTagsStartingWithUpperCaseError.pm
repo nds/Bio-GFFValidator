@@ -16,7 +16,8 @@ use Data::Dumper;
 extends "Bio::GFFValidator::Errors::BaseError";
 
 has 'tag'   		=> ( is => 'ro', isa => 'Str', required => 1 ); #Tag
-has 'feature_id'	=> ( is => 'ro', isa => 'Str', required => 1 ); #ID of feature
+has 'feature'   	=> ( is => 'ro', isa => 'Bio::SeqFeatureI', required => 1 ); #The feature object
+
 
 sub validate {
 
@@ -24,7 +25,7 @@ sub validate {
 	
  	if ( (lc($self->tag) !~ m/id|name|alias|parent|target|gap|derives_from|note|dbxref|ontology_term|is_circular/) and ($self->tag =~ /^[[:upper:]]/) ){
  		
- 		$self->set_error_message("line_number", $self->feature_id, $self->tag." is not a reserved tag in GFF. It should not start with an uppercase character." );	
+ 		$self->set_error_message("line_number", "", $self->tag." is not a reserved tag in GFF. It should not start with an uppercase character." );	
  			
  	}
 	
