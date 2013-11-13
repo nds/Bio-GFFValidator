@@ -3,7 +3,7 @@ package Bio::GFFValidator::Errors::Type::TypeEmptyError;
 
 =head1 SYNOPSIS
 
-Checks that the type column in the feature has a value
+Checks that the type column in the feature object is not empty
 =method 
 
 
@@ -28,7 +28,7 @@ sub validate {
  	# It can, however, have a . which is equivalent to an empty value
  	
 	if(not defined $type or $type eq '.'){
-		$self->set_error_message("line_number", $self->feature->seq_id, "Type cannot be empty" );	
+		$self->set_error_message("line_number","", "Type column cannot be empty" );	
 	}
 		
 	return $self;

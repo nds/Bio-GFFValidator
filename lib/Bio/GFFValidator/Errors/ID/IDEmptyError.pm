@@ -3,7 +3,7 @@ package Bio::GFFValidator::Errors::ID::IDEmptyError;
 
 =head1 SYNOPSIS
 
-Checks that the ID column in the feature has a value
+Checks that the ID column in the feature is not empty
 =method 
 
 
