@@ -25,9 +25,8 @@ has 'features'		    => ( is => 'ro', isa => 'ArrayRef', required => 1);
 has 'prefix'			=> ( is => 'ro', isa => 'Str', required => 1);
 has 'gene'	            => ( is => 'rw', isa => 'Bio::GFFValidator::GeneModel::Gene'); #We treat the gene as being the top of the model - everything else hangs off of it
 has 'dangling_features' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } ); # A list of features that, although having the same prefix, cannot be attached to the gene model
-has 'dangling_features' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 has 'overhanging_features' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
-has 'strands'			=> ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has 'strands'			=> ( is => 'rw', isa => 'HashRef');
 
 sub build {
 	  my ($self) = @_;
@@ -37,10 +36,18 @@ sub build {
 	  my @polypeptides;
 	  my @utrs;
 	  
+	  # We collect the data to do a strands check later on. Bio Perl will only return 0, 1 and -1 as valid strand values
+	  my %strands;
+	  $strands{"0"} = 0; 
+	  $strands{"1"} = 0;
+	  $strands{"-1"} = 0;
+	    
 	  for my $feature (@{$self->features}){
 	  		my $tag = lc($feature->primary_tag);
 	  		
-	  		#TODO: Improve this code to reduce repetition
+	  		$strands{$feature->strand}++;
+	  		
+	  		#TODO: Reduce repetition below
 	  		
 	  		if($tag =~ /gene/){
 	  			# Check that only one gene is present
@@ -99,7 +106,7 @@ sub build {
 	  					}
 	  				}else{
 	  					push(@{$self->dangling_features},$exon->name);
-	  					print STDERR "Pushing $exon->name into dangling features \n";
+	  			
 	  				}	  				
 	  			}
 	  				
@@ -112,7 +119,7 @@ sub build {
 	  					}
 	  				}else{
 	  					push(@{$self->dangling_features},$polypeptide->name);
-	  					print STDERR "Pushing $polypeptide->name into dangling features \n";
+	  		
 	  				}	  				
 	  			}
 	  			
@@ -125,7 +132,7 @@ sub build {
 	  					}
 	  				}else{
 	  					push(@{$self->dangling_features},$utr->name);
-	  					print STDERR "Pushing $utr->name into dangling features \n";
+	  				
 	  				}	  				
 	  			}
 	  				
@@ -137,7 +144,7 @@ sub build {
 	  				}
 				}else{
 					push(@{$self->dangling_features},$transcript->name);
-					print STDERR "Pushing $transcript->name into dangling features \n";
+
 				}
 	  		}
 	  		$self->gene($gene);
@@ -150,7 +157,7 @@ sub build {
 	  	
 	  	}
 	
-
+	$self->strands(\%strands);
 	return $self; 
 	  
 }
