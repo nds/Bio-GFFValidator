@@ -38,11 +38,13 @@ use Bio::GFFValidator::Errors::Attributes::ID::IDNotUniqueError;
 use Bio::GFFValidator::Errors::Attributes::MultipleValuesError;
 use Bio::GFFValidator::Errors::GeneModel::GeneModelErrors;
 use Bio::GFFValidator::ErrorHandlers::PrintReport;
+use Bio::GFFValidator::ErrorHandlers::PrintSummary;
 
 
-has 'gff_file'        => ( is => 'ro', isa => 'Str',  required => 1 );
-has 'error_report'	  => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_report' ); #Default to a file named with the gff filename + ERROR_REPORT.txt
-has 'handler_option'  => ( is => 'ro', isa => 'Num', default => 1); # 1 - print errors in a report, 2 - print a summary, 3 - fix errors (not implemented yet)
+has 'gff_file'                => ( is => 'ro', isa => 'Str',  required => 1 );
+has 'error_report'	          => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_report' ); #Default to a file named with the gff filename + ERROR_REPORT.txt
+has 'error_summary_report'	  => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_summary_report' ); #Default to a file named with the gff filename + ERROR_SUMMARY_REPORT.txt
+has 'handler_option'          => ( is => 'ro', isa => 'Num', default => 1); # 1 - print errors in a report, 2 - print a summary, 3 - fix errors (not implemented yet)
 
 
 sub _build_error_report {
@@ -50,6 +52,10 @@ sub _build_error_report {
   return getcwd()."/".basename($self->gff_file).".ERROR_REPORT.txt"; 
 }
 
+sub _build_error_summary_report {
+  my ($self) = @_;
+  return getcwd()."/".basename($self->gff_file).".ERROR_SUMMARY_REPORT.txt"; 
+}
 
 sub run {
 	my ($self) = @_;
@@ -143,10 +149,12 @@ sub run {
 	if($self->handler_option == 1){ # Print errors into a report
 		my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(gff_file => $self->gff_file, errors => \@errors_found, error_report => $self->error_report);
 		$report_printer->print();
-	}else{
-	
-	 # Else, print summary (if option 2) or get the validator to fix errors (if option 3)
-	 # Both these not yet implemented
+	}elsif($self->handler_option == 2)){
+		my $summary_printer = Bio::GFFValidator::ErrorHandlers::PrintSummary->new(gff_file => $self->gff_file, errors => \@errors_found, error_summary_report => $self->error_summary_report);
+		$report_printer->print();
+	}elsif($self->handler_option == 3)) { #Get the validator to fix errors (if option 3)
+	 
+	 	# not yet implemented
 	 
 	}
 	
