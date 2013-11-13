@@ -40,6 +40,12 @@ sub validate {
 	
 	}
 	
+	# Are the features all on the same strand?
+	my $number_of_features = scalar(@{$self->gene_model->features});
+	if( (${$self->gene_model->strands}{"0"} != $number_of_features) and (${$self->gene_model->strands}{"1"} != $number_of_features) and (${$self->gene_model->strands}{"-1"} != $number_of_features)) {
+		$error_message = $self->_concat_to_error_message($error_message, "All the features of this gene model are not on the same strand");
+	}
+	
 	# Set the error message
 	if($error_message){
 		# We use the gene model prefix as the value for these errors (not the feature ID)
@@ -54,14 +60,13 @@ sub fix_it {
 }
 
 sub _concat_to_error_message {
-	# TODO: Consider an alternative to creating this rather complicated error message
-	
-	my ($self, $existing_message, $new_message) = @_;
+	# TODO: Implement an alternative to creating this rather complicated error message!
+		my ($self, $existing_message, $new_message) = @_;
 	my $spacer;
 	if($existing_message eq ''){
 		$spacer = ''; # Don't intend the first message
 	}else{
-		$spacer = " " x 18;
+		$spacer = ' ' x length($self->gene_model->prefix."(prefix): ");
 	}
 	return $existing_message.$spacer.$new_message."\n";
 
