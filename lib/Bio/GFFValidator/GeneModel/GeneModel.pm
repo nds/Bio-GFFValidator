@@ -21,12 +21,14 @@ use Bio::GFFValidator::GeneModel::Polypeptide;
 use Bio::GFFValidator::GeneModel::UTR;
 
 
-has 'features'		    => ( is => 'ro', isa => 'ArrayRef', required => 1);
-has 'prefix'			=> ( is => 'ro', isa => 'Str', required => 1);
-has 'gene'	            => ( is => 'rw', isa => 'Bio::GFFValidator::GeneModel::Gene'); #We treat the gene as being the top of the model - everything else hangs off of it
-has 'dangling_features' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } ); # A list of features that, although having the same prefix, cannot be attached to the gene model
-has 'overhanging_features' => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
-has 'strands'			=> ( is => 'rw', isa => 'HashRef');
+has 'features'		    	=> ( is => 'ro', isa => 'ArrayRef', required => 1);
+has 'number_of_features'	=> ( is => 'rw', isa => 'Str'); 
+has 'prefix'				=> ( is => 'ro', isa => 'Str', required => 1);
+has 'gene'	            	=> ( is => 'rw', isa => 'Bio::GFFValidator::GeneModel::Gene'); #We treat the gene as being the top of the model - everything else hangs off of it
+has 'dangling_features' 	=> ( is => 'rw', isa => 'ArrayRef', default => sub { [] } ); # A list of features that, although having the same prefix, cannot be attached to the gene model
+has 'overhanging_features' 	=> ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
+has 'strands'				=> ( is => 'rw', isa => 'HashRef');
+
 
 sub build {
 	  my ($self) = @_;
@@ -41,6 +43,7 @@ sub build {
 	  $strands{"0"} = 0; 
 	  $strands{"1"} = 0;
 	  $strands{"-1"} = 0;
+	  $self->number_of_features(scalar(@{$self->features}));
 	    
 	  for my $feature (@{$self->features}){
 	  		my $tag = lc($feature->primary_tag);

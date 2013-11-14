@@ -41,7 +41,7 @@ sub validate {
 	}
 	
 	# Are the features all on the same strand?
-	my $number_of_features = scalar(@{$self->gene_model->features});
+	my $number_of_features = ($self->gene_model)->number_of_features;
 	if( (${$self->gene_model->strands}{"0"} != $number_of_features) and (${$self->gene_model->strands}{"1"} != $number_of_features) and (${$self->gene_model->strands}{"-1"} != $number_of_features)) {
 		$error_message = $self->_concat_to_error_message($error_message, "All the features of this gene model are not on the same strand");
 	}
