@@ -64,7 +64,7 @@ sub _concat_to_error_message {
 		my ($self, $existing_message, $new_message) = @_;
 	my $spacer;
 	if($existing_message eq ''){
-		$spacer = ''; # Don't intend the first message
+		$spacer = ''; # Don't indent the first message
 	}else{
 		$spacer = ' ' x length($self->gene_model->prefix."(prefix): ");
 	}
