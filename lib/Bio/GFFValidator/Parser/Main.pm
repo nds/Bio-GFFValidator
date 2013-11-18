@@ -60,7 +60,7 @@ sub parse {
         while(my $feature = $gff_parser->next_feature()) {
          	push(@array_of_features, $feature);
          	
-         	# Construct the gene models.
+         	# Construct the gene models. -------------------------------------------------------------------------------
          	# We look ahead in the file and collect all the feature lines that have the same ID/prefix. When the prefix
          	# changes, we process all the features and try to create a gene model. We assume here that the features are
          	# ordered by location and hence the components of one gene model are clustered together in the file.
@@ -73,7 +73,6 @@ sub parse {
  				
  				if(defined $prefix and $current_prefix ne $prefix){
 					if($current_prefix ne ""){ #If not equal to "", then it means this is not the first line
-# 						$gene_models{$current_prefix} = [@features_for_gene_model];
 						my $gene_model = (Bio::GFFValidator::GeneModel::GeneModel->new(features => \@features_for_gene_model, prefix => $current_prefix))->build();
 						push(@{$self->gene_models},$gene_model);
 					}						
@@ -86,14 +85,15 @@ sub parse {
    	
          	}
          	
+         	
         }
         
-        # Gather the last gene model
-#       $gene_models{$current_prefix} = [@features_for_gene_model];
+        # Don't forget to gather the last gene model
 		my $gene_model = (Bio::GFFValidator::GeneModel::GeneModel->new(features => \@features_for_gene_model, prefix => $current_prefix))->build();
 		push(@{$self->gene_models},$gene_model);
+		# (END) Construct the gene models. -------------------------------------------------------------------------------
         
-        # Process the header. Bio perl so far only returns seq region lines. TODO: Investigate if comments and other directives can be extracted using Bio Perl
+        # Process the header. Bio perl so far only returns seq region lines. TODO: Investigate if comments and other directives can be extracted using Bio Perl so that checks can be performed on them
         while(my $seq_region = $gff_parser->next_segment()){
         	$seq_regions{$seq_region->id} = [$seq_region->start, $seq_region->end];
         

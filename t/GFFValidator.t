@@ -28,13 +28,13 @@ ok($gff_validator->run, 'Run the validator');
 # Check the location of the error report
 my $current_dir = getcwd();
 is(
-    $gff_validator->error_report_name,
-    join ('/', $current_dir, 'ERROR_REPORT.txt'),   
+    $gff_validator->error_report,
+    join ('/', $current_dir, 'sample.gff3.ERROR_REPORT.txt'),   
    'Default error report name ok');
-ok(-e $gff_validator->error_report_name, 'Error report exists');
+ok(-e $gff_validator->error_report, 'Error report exists');
 
 # Check the contents of the error report
-files_eq($gff_validator->error_report_name, $current_dir.'/t/data/sample_error_report.txt', "Error file contents OK");
+files_eq($gff_validator->error_report, $current_dir.'/t/data/sample_error_report.txt', "Error file contents OK");
 
 
 done_testing();

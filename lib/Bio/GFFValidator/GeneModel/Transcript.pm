@@ -29,7 +29,7 @@ sub add_exon {
 
 sub add_polypeptide {	
 	 my ($self, $polypeptide) = @_;
-	 push ( @{$self->polypeptide}, $polypeptide);
+	 push ( @{$self->polypeptides}, $polypeptide);
 }
 
 sub add_utr {	

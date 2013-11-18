@@ -4,7 +4,8 @@ package Bio::GFFValidator::Errors::Start_and_End::NotWithinRangeError;
 =head1 SYNOPSIS
 
 Checks the start and end of a feature to make sure it is within the range of the landmark feature.
-If the feature is marked as being circular, this rule does not apply.
+If the feature is marked as being circular, this rule does not apply. There are different rules for
+circular features - check specification and implement this.
 
 =method 
 
@@ -29,9 +30,9 @@ sub validate {
  	my $start = ${$coordinates}[0]; # Bit verbose, but probably be clearer in the long run
  	my $end = ${$coordinates}[1]; 
 	
-	# Is the start and end for this sequence feature specified?
+	# Is the start and end for this landmark feature specified to begin with?
 	unless(defined $start and defined $end){
-  		$self->set_error_message("line_number", $self->feature->seq_id, "Start and end not specified in a sequence region line for ".$self->feature->seq_id );
+  		$self->set_error_message("line_number", "", "Start and end not specified in a sequence region line for ".$self->feature->seq_id );
   		return $self;
   	}
  	
@@ -39,9 +40,9 @@ sub validate {
 	if($self->feature->has_tag('is_circular')){
 		# Implement special checks for circular features
 	}elsif($self->feature->start < $start ){
-		$self->set_error_message("line_number", $self->feature->seq_id, "Start of feature ".$self->feature->start." is not within range"); 
+		$self->set_error_message("line_number", "", "Start of feature (".$self->feature->start.") is not within range"); 
 	}elsif($self->feature->end > $end ){
-		$self->set_error_message("line_number", $self->feature->seq_id, "End of feature ".$self->feature->end." is not within range"); 
+		$self->set_error_message("line_number", "", "End of feature (".$self->feature->end.") is not within range"); 
 	
 	}
 	return $self;

@@ -4,6 +4,7 @@ package Bio::GFFValidator::Errors::Attributes::ValueEmptyError;
 =head1 SYNOPSIS
 
 Checks that all tags have a value
+
 =method 
 
 

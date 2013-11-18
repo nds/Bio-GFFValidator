@@ -33,7 +33,7 @@ sub validate {
 	
 		# Is the start of the feature less than the end?
 		if($start > $end){
-			$self->set_error_message("line_number", $self->feature->seq_id, "Start of feature ($start) should be less than the end ($end)" );	
+			$self->set_error_message("line_number", "", "Start of feature ($start) should be less than the end ($end)" );	
 		}
 	}
 	

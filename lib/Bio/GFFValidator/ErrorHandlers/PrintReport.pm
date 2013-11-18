@@ -13,54 +13,41 @@ Given an array ref of errors, this prints out all the error messages into an err
 
 
 use Moose;
+use Time::Piece;
 
 
-
+has 'gff_file'		=> ( is => 'ro', isa => 'Str', 	required => 1);
 has 'errors'        => ( is => 'ro', isa => 'ArrayRef',  required => 1 );
-has 'error_report'	=> ( is => 'ro', isa => 'Str', 	lazy => 1,	 builder => '_build_output_filename' );
-
-
-sub _build_output_filename {
-  my ($self) = @_;
-  return getcwd()."/ERROR_REPORT.txt";
-}
+has 'error_report'	=> ( is => 'ro', isa => 'Str', 	required => 1);
 
 
 sub print {
 
   my ($self) = @_;
   # For each error, print the error message into the specified error file
-  # We should be sent an error file name that includes the name of the GFF file, the date and in the 
-  # relevant directory. If not we produce, ERROR_REPORT.txt in the current directory.
 
-  open(my $fh, ">", $self->error_report) or die "cannot open $self->error_report: $!";
+  open(my $fh, ">", $self->error_report) or die "Cannot open $self->error_report: $!";
+  my $date = Time::Piece->new->strftime('%d/%m/%Y');
+  my $time = localtime;
 
   # Print header of file
-  print $fh "Error report - testing\n";
-
-
-  for my $error (@ {$self->errors} ){
-  	
-  	if($error->triggered){
-  		print $fh $error->get_error_message."\n";
-  		print STDERR $error->get_error_message."\n"; # Delete
-  	}
-  	
+  print $fh "~~ Error report for ".$self->gff_file." ~~ \n";
+  #print STDERR "~~ Error report for ".$self->gff_file." ~~ \n";
+  print $fh "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
+  #print STDERR "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
   
+  for my $error (@ {$self->errors} ){
+  	 
+  	 	my $error_message = $error->get_error_message;
+  	 	$error_message =~ s/\n+$//; # Incase there are any new lines put in by the error classes....like in the Gene Model Errors class
+  		print $fh $error_message,"\n";
+  		#print STDERR $error_message,"\n"; # Delete
+
   }
   
   close($fh);
   
-  
-}
-
-sub error_report_name {
-	my ($self) = @_;
-	return $self->error_report;
-
-}
-
-
+  }
 
 
 no Moose;

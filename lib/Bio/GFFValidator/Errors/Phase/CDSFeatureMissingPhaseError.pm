@@ -3,7 +3,10 @@ package Bio::GFFValidator::Errors::Phase::CDSFeatureMissingPhaseError;
 
 =head1 SYNOPSIS
 
-Checks that all CDS features have a strand
+Checks that all CDS features have a strand and that it is 0, 1 or 2. 
+If the phase is anything besides .,0,1 or 2 the Bio Perl parser will complain. So, here we really just need to 
+check that for CDS features, the phase is 0, 1 or 2.
+
 =method 
 
 
@@ -27,7 +30,7 @@ sub validate {
  	my $type = $self->feature->primary_tag;
  	
  	if(uc($type) eq "CDS" and $phase !~ /[012]/) {
- 		$self->set_error_message("line_number", $self->feature->seq_id, "Phase cannot be unspecified for CDS features. Should be 0,1 or 2." );	
+ 		$self->set_error_message("line_number", "", "Phase ($phase) incorrect for CDS features. Should be 0,1 or 2." );	
 	}
 	
 	return $self;
