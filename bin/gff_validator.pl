@@ -67,7 +67,7 @@ $debug           ||= 0;
 
 my $gff_validator = Bio::GFFValidator::GFFValidator->new(
    gff_file =>  $gff_file,
-   error_report => getcwd()."/".$self->$error_file,
+   error_report => getcwd()."/".$error_file,
    handler_option => $self->output_option,
    #debug => $debug,
 )->run;
