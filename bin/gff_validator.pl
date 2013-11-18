@@ -47,10 +47,10 @@ GetOptions(
 Usage: gff_validator [options]
 	
 		-f|gff_file        <gff file>
-		-o|output_option   <output options 1: error report 2: summary 3: fix errors>
-        -e|error_file	   <name of error file>
-        -d|debug		   <debug>
-        -h|help      	   <this message>
+		-o|output_option   <output option (1 (default): error report 2: summary 3: fix errors)>
+		-e|error_file	   <name of error file (default is gff_file_name.ERROR_REPORT in current working directory)>
+		-d|debug		   <debug>
+		-h|help      	   <this message>
 
 Takes in a gff file and validates it. Depending on the -o option, it can either print an error report (default), print a summary or fix the errors found (not implemented yet)
 
