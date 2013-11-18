@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-package  Bio::GFFValidator::BIN::GFFVALIDATOR;
+package  Bio::GFFValidator::Bin::GFFValidator;
 # ABSTRACT: 
 # PODNAME: gff_validator
 =head1 SYNOPSIS
