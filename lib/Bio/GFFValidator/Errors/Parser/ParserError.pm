@@ -41,7 +41,7 @@ sub validate {
   
   # Switch behaviour can be unpredictable and there is some talk of it being depracated. So sticking to simple if/else structure below
 
-  if($exception_message =~ m/(\S+) does not look like GFF3 to me/){
+  if($exception_message =~ m/(\[.*?\]) does not look like GFF3 to me/){
   	 $self->set_error_message("line_number", $1 , "Not a valid GFF3 line as it does not contain 9 tab-delimited values.");
   }elsif($exception_message =~ m/\'\' is not a valid/){
   	 $self->set_error_message("line_number", "-", "Empty fields cannot be left blank. They must have a dot.");
