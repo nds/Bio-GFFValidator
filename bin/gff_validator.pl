@@ -21,7 +21,7 @@ gff_validator -f myfile.gff
 =cut
 
 BEGIN { unshift( @INC, '../lib' ) }
-use lib "/software/pathogen/internal/prod/lib";
+#use lib "/software/pathogen/internal/prod/lib";
 use Moose;
 use Getopt::Long;
 use Cwd;
