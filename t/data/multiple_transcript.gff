@@ -1,0 +1,53 @@
+##gff-version 3
+##sequence-region Schisto_mansoni.Chr_1 1 65476681
+Schisto_mansoni.Chr_1	chado	CDS	21519438	21520048	.	-	0	ID=Smp_128890.2:exon:24;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	gene	21519438	21550316	.	-	.	ID=Smp_128890;note=*isObsolete: false;note=*feature_id: 23233117;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	mRNA	21519438	21550316	.	-	.	ID=Smp_128890.2;Parent=Smp_128890;note=*isObsolete: false;note=*feature_id: 23233118;
+Schisto_mansoni.Chr_1	chado	polypeptide	21519438	21550316	.	-	.	ID=Smp_128890.2:pep;Derives_from=Smp_128890.2;note=*timelastmodified: 14.10.2011+06:35:47+BST;
+Schisto_mansoni.Chr_1	chado	CDS	21521564	21522244	.	-	0	ID=Smp_128890.2:exon:22;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21522801	21523211	.	-	0	ID=Smp_128890.2:exon:21;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	mRNA	21523857	21550316	.	-	.	ID=Smp_128890.1;Parent=Smp_128890;note=*isObsolete: false;note=*feature_id: 23233144;
+Schisto_mansoni.Chr_1	chado	three_prime_UTR	21523857	21523860	.	-	.	ID=Smp_128890.1:3utr;Parent=Smp_128890.1;note=*isObsolete: false;note=*feature_id: 23250678;
+Schisto_mansoni.Chr_1	chado	CDS	21523861	21524247	.	-	0	ID=Smp_128890.1:exon:20;Parent=Smp_128890.1;note=*isObsolete: false;
+Schisto_mansoni.Chr_1	chado	polypeptide	21523861	21550316	.	-	.	ID=Smp_128890.1:pep;Derives_from=Smp_128890.1;note=*timelastmodified: 14.10.2011+06:37:11+BST;
+Schisto_mansoni.Chr_1	chado	CDS	21523924	21524247	.	-	0	ID=Smp_128890.2:exon:20;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21525229	21525543	.	-	0	ID=Smp_128890.1:exon:19;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21525229	21525543	.	-	0	ID=Smp_128890.2:exon:19;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21526454	21526652	.	-	0	ID=Smp_128890.1:exon:18;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21526454	21526652	.	-	0	ID=Smp_128890.2:exon:18;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21528355	21528679	.	-	0	ID=Smp_128890.1:exon:17;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21528355	21528679	.	-	0	ID=Smp_128890.2:exon:17;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21531666	21531842	.	-	0	ID=Smp_128890.1:exon:16;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21531666	21531842	.	-	0	ID=Smp_128890.2:exon:16;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21531930	21531964	.	-	0	ID=Smp_128890.1:exon:15;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21531930	21531964	.	-	0	ID=Smp_128890.2:exon:15;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21533073	21533589	.	-	0	ID=Smp_128890.1:exon:14;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21533073	21533589	.	-	0	ID=Smp_128890.2:exon:14;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21534031	21534090	.	-	0	ID=Smp_128890.1:exon:13;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21534031	21534090	.	-	0	ID=Smp_128890.2:exon:13;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21536333	21536437	.	-	0	ID=Smp_128890.1:exon:12;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21536333	21536437	.	-	0	ID=Smp_128890.2:exon:12;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21538282	21538706	.	-	0	ID=Smp_128890.1:exon:11;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21538282	21538706	.	-	0	ID=Smp_128890.2:exon:11;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21539421	21539613	.	-	0	ID=Smp_128890.1:exon:10;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21539421	21539613	.	-	0	ID=Smp_128890.2:exon:10;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21541684	21541879	.	-	0	ID=Smp_128890.1:exon:9;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21541684	21541879	.	-	0	ID=Smp_128890.2:exon:9;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21543058	21543168	.	-	0	ID=Smp_128890.1:exon:8;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21543058	21543168	.	-	0	ID=Smp_128890.2:exon:8;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21543256	21543618	.	-	0	ID=Smp_128890.1:exon:7;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21543256	21543618	.	-	0	ID=Smp_128890.2:exon:7;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21544667	21545176	.	-	0	ID=Smp_128890.1:exon:6;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21544667	21545176	.	-	0	ID=Smp_128890.2:exon:6;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21545809	21546039	.	-	0	ID=Smp_128890.1:exon:5;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21545809	21546039	.	-	0	ID=Smp_128890.2:exon:5;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21546988	21547251	.	-	0	ID=Smp_128890.1:exon:4;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21546988	21547251	.	-	0	ID=Smp_128890.2:exon:4;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21548147	21548287	.	-	0	ID=Smp_128890.1:exon:3;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21548147	21548287	.	-	0	ID=Smp_128890.2:exon:3;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21548457	21548735	.	-	0	ID=Smp_128890.1:exon:2;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21548457	21548735	.	-	0	ID=Smp_128890.2:exon:2;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21549888	21550316	.	-	0	ID=Smp_128890.1:exon:1;Parent=Smp_128890.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:37:11+BST
+Schisto_mansoni.Chr_1	chado	CDS	21549888	21550316	.	-	0	ID=Smp_128890.2:exon:1;Parent=Smp_128890.2;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+Schisto_mansoni.Chr_1	chado	CDS	21549888	21550316	.	-	0	ID=Smp_128890.3:exon:1;Parent=Smp_128890.3;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+06:35:47+BST
+##FASTA
