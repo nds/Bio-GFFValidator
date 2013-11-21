@@ -21,6 +21,10 @@ has 'feature'   	=> ( is => 'ro', isa => 'Bio::SeqFeatureI', required => 1 ); #T
 
 sub validate {
 
+	# When genomes are dumped out of Chado, some keywords are capitalised that are not reserved words in the specification.
+	# These are: "GO", "EC_number", "EMBL_qualifier", "SignalP_prediction", "GPI_anchor_cleavage_site", "GPI_anchored", "PlasmoAP_score"
+	# Should we add these to an exception list?
+
 	my ($self) = @_;
 	
  	if ( (lc($self->tag) !~ m/id|name|alias|parent|target|gap|derives_from|note|dbxref|ontology_term|is_circular/) and ($self->tag =~ /^[[:upper:]]/) ){
