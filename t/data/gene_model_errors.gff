@@ -1,0 +1,9 @@
+##gff-version 3
+##sequence-region Schisto_mansoni.Chr_1 1 65476681
+# Dangling features, overhanging features, different strand
+Schisto_mansoni.Chr_1	chado	CDS	11159	11220	.	+	0	ID=Smp_186980.1:exon:1;Parent=Smp_186980.1
+Schisto_mansoni.Chr_1	chado	gene	11159	12750	.	+	.	ID=Smp_186980
+Schisto_mansoni.Chr_1	chado	mRNA	11159	12750	.	-	.	ID=Smp_186980.1;Parent=Smp_186980
+Schisto_mansoni.Chr_1	chado	polypeptide	11159	12751	.	+	.	ID=Smp_186980.1:pep;Derives_from=Smp_186980.1;note=*timelastmodified: 14.10.2011+12:49:04+BST;note=*feature_id: 23195294;note=*isObsolete:
+Schisto_mansoni.Chr_1	chado	CDS	11220	11224	.	+	0	ID=Smp_186981.1:exon:1;Parent=Smp_186981.1;
+##FASTA

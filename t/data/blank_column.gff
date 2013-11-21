@@ -1,0 +1,5 @@
+##gff-version 3
+##sequence-region Schisto_mansoni.Chr_1 1 65476681
+# Blank phase
+Schisto_mansoni.Chr_1		contig	11159	11220	.	+		ID=Smp_186980.1:exon:1;Parent=Smp_186980.1
+##FASTA

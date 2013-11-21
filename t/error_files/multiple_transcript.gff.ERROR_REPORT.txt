@@ -1,0 +1,1 @@
+Smp_128890(prefix): The following features cannot be attached to a gene model: Smp_128890.3:exon:1

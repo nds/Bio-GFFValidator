@@ -1,0 +1,1 @@
+[ctg123 . gene            1000  9000  .  +  .  ID=gene00001;Name=EDEN]: Not a valid GFF3 line as it does not contain 9 tab-delimited values.

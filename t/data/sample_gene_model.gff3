@@ -1,9 +1,0 @@
-Schisto_mansoni.Chr_1   chado   contig  1       19825   .       +       .       ID=contig_14209;Name=null;note=*isObsolete: false;note=*feature_id: 23380219;note=*timelastmodified: 19.10.2011+03:43:10+BST
-Schisto_mansoni.Chr_1   chado   CDS     11159   11220   .       +       0       ID=Smp_186980.1:exon:1;Parent=Smp_186980.1;note=*isObsolete: false;note=*timelastmodified: 14.10.2011+12:49:06+BST
-Schisto_mansoni.Chr_1   chado   gene    11159   12750   .       +       .       ID=Smp_186980;note=*isObsolete: false;note=*feature_id: 23195292;note=*timelastmodified: 14.10.2011+12:49:02+BST
-Schisto_mansoni.Chr_1   chado   mRNA    11159   12750   .       +       .       ID=Smp_186980.1;Parent=Smp_186980;note=*isObsolete: false;note=*feature_id: 23195293;note=*timelastmodified: 14.10.2011+12:49:02+BST
-Schisto_mansoni.Chr_1   chado   polypeptide     11159   12750   .       +       .       ID=Smp_186980.1:pep;Derives_from=Smp_186980.1;note=*timelastmodified: 14.10.2011+12:49:04+BST;note=*feature_id: 23195294;note=*isObsolete:
-
-
-utrs - if they are present, the length of the exon may be different to gene
-mulitple transcripts - if so, the bits derived from transcript may also not be the same length as gene

@@ -1,0 +1,2 @@
+Smp_186980.1:exon:1: ID column cannot be empty
+Smp_186980.1:exon:1: Start and end not specified in a sequence region line for .

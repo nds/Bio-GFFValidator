@@ -46,6 +46,7 @@ has 'error_report'	          => ( is => 'rw', isa => 'Str',  lazy     => 1, buil
 has 'error_summary_report'	  => ( is => 'rw', isa => 'Str',  lazy     => 1, builder => '_build_error_summary_report' ); #Default to a file named with the gff filename + ERROR_SUMMARY_REPORT.txt
 has 'handler_option'          => ( is => 'ro', isa => 'Num', default => 1); # 1 - print errors in a report, 2 - print a summary, 3 - fix errors (not implemented yet)
 has 'status'                  => ( is => 'rw', isa => 'Bool', default => 0); # 0 - No errors found, 1 - Errors found
+has 'mode'                    => ( is => 'ro', isa => 'Str', default => 'normal'); # test - if you are running dzil tests
 
 
 sub _build_error_report {
@@ -160,10 +161,10 @@ sub run {
 		$self->status(1); #True
 	
 		if($self->handler_option == 1 ){ # Print errors into a report
-			my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(gff_file => $self->gff_file, errors => \@errors_found, error_report => $self->error_report);
+			my $report_printer = Bio::GFFValidator::ErrorHandlers::PrintReport->new(gff_file => $self->gff_file, errors => \@errors_found, error_report => $self->error_report, mode => $self->mode);
 			$report_printer->print();
 		}elsif($self->handler_option == 2){
-			my $summary_printer = Bio::GFFValidator::ErrorHandlers::PrintSummary->new(gff_file => $self->gff_file, errors => \@errors_found, error_summary_report => $self->error_summary_report);
+			my $summary_printer = Bio::GFFValidator::ErrorHandlers::PrintSummary->new(gff_file => $self->gff_file, errors => \@errors_found, error_summary_report => $self->error_summary_report, mode => $self->mode);
 			$summary_printer->print();
 		}elsif($self->handler_option == 3) { #Get the validator to fix errors (if option 3)	 
 	 		# not yet implemented

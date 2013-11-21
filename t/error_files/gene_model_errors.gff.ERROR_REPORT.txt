@@ -1,0 +1,3 @@
+Smp_186980(prefix): The following features are outside the boundaries of the gene/transcript: Smp_186980.1:pep
+                    All the features of this gene model are not on the same strand
+Smp_186981(prefix): The following features cannot be attached to a gene model: Smp_186981.1:exon:1

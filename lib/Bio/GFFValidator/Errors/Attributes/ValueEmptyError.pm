@@ -4,6 +4,8 @@ package Bio::GFFValidator::Errors::Attributes::ValueEmptyError;
 =head1 SYNOPSIS
 
 Checks that all tags have a value
+Bio Perl just does not return any tags that have no values, and so we cannot check them. They effectively get ignored.
+This test is redundant and is not called
 
 =method 
 
@@ -23,7 +25,6 @@ sub validate {
 	
  	for my $tag (keys $self->attributes){
  		my @values = $self->attributes->{$tag};
- 		print STDERR "Checking $tag \n";
  		if (not @values){
  			$self->set_error_message("line_number", $tag, "The $tag tag does not contain any values." );	
  		
