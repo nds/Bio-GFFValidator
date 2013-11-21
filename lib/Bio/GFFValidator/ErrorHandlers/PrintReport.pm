@@ -19,6 +19,7 @@ use Time::Piece;
 has 'gff_file'		=> ( is => 'ro', isa => 'Str', 	required => 1);
 has 'errors'        => ( is => 'ro', isa => 'ArrayRef',  required => 1 );
 has 'error_report'	=> ( is => 'ro', isa => 'Str', 	required => 1);
+has 'mode'          => ( is => 'ro', isa => 'Str', default => 'normal'); # test - if you are running dzil tests
 
 
 sub print {
@@ -30,18 +31,20 @@ sub print {
   my $date = Time::Piece->new->strftime('%d/%m/%Y');
   my $time = localtime;
 
-  # Print header of file
-  print $fh "~~ Error report for ".$self->gff_file." ~~ \n";
-  #print STDERR "~~ Error report for ".$self->gff_file." ~~ \n";
-  print $fh "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
-  #print STDERR "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
+  # Print header of file (if not in test mode)
+  if($self->mode eq 'normal') {
+  		print $fh "~~ Error report for ".$self->gff_file." ~~ \n";
+  		print STDERR "~~ Error report for ".$self->gff_file." ~~ \n";
+  		print $fh "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
+  		print STDERR "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
+  }
   
   for my $error (@ {$self->errors} ){
   	 
   	 	my $error_message = $error->get_error_message;
   	 	$error_message =~ s/\n+$//; # Incase there are any new lines put in by the error classes....like in the Gene Model Errors class
   		print $fh $error_message,"\n";
-  		#print STDERR $error_message,"\n"; # Delete
+  		print STDERR $error_message,"\n"; # Delete
 
   }
   
