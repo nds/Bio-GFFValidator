@@ -1,0 +1,3 @@
+Smp_128890: Comment is not a reserved tag in GFF. It should not start with an uppercase character.
+Smp_128890.2:exon:20: Parent has multiple values. Only one is allowed.
+Non-unique IDs: The following IDs are not unique: Smp_128891

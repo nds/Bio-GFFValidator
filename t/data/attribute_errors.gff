@@ -1,0 +1,10 @@
+##gff-version 3
+##sequence-region Schisto_mansoni.Chr_1 1 65476681
+# ID not unique, Non reserved tag starting with capital letter, Multiple values for Parent, Empty value (ignored by bio perl)
+Schisto_mansoni.Chr_1	chado	gene	21519438	21550316	.	-	.	ID=Smp_128890;Comment=should not be capital
+Schisto_mansoni.Chr_1	chado	mRNA	21519438	21550316	.	-	.	ID=Smp_128890.2;Parent=Smp_128890;
+Schisto_mansoni.Chr_1	chado	polypeptide	21519438	21550316	.	-	.	ID=Smp_128890.2:pep;Derives_from=Smp_128890.2;
+Schisto_mansoni.Chr_1	chado	CDS	21523924	21524247	.	-	0	ID=Smp_128890.2:exon:20;Parent=Smp_128890.2,Smp_128890.1;comment=
+Schisto_mansoni.Chr_1	chado	gene	21550317	21550319	.	-	.	ID=Smp_128891;
+Schisto_mansoni.Chr_1	chado	gene	21550320	21550322	.	-	.	ID=Smp_128891;
+##FASTA

@@ -20,7 +20,14 @@ my $cwd = getcwd();
 # All error files are in t/error_files and should be named with the corresponding gff file name with '.ERROR_REPORT.txt' at the end
 
 my @data_files = (
-	'multiple_transcript.gff',
+# 	'multiple_transcript.gff',
+# 	'attribute_errors.gff',
+# 	'gene_model_errors.gff',
+# 	'ID_empty_error.gff',
+# 	'no_tabs.gff',
+ 	'blank_column.gff',
+# 	'wrong_phase.gff',
+# 	'unescaped_greater_than_character.gff',
 );
 
 for my $data_file (@data_files){ 
