@@ -33,7 +33,7 @@ has 'strands'				=> ( is => 'rw', isa => 'HashRef');
 sub build {
 	  my ($self) = @_;
 	  my $gene;
-	  my @transcripts;
+	  my %transcripts; 
 	  my @exons;
 	  my @polypeptides;
 	  my @utrs;
@@ -52,19 +52,21 @@ sub build {
 	  		
 	  		#TODO: Reduce repetition below
 	  		
+	  		
 	  		if($tag =~ /gene/){
-	  			# Check that only one gene is present
+	  			# TODO: Check that only one gene is present
 	  			$gene = Bio::GFFValidator::GeneModel::Gene->new( name=>($self->_get_name($feature)),
 	  															 start=>$feature->start,
 	  															 end=>$feature->end,
 	  															 strand=>$feature->strand);
-	  		}elsif($tag =~ /mrna/){ # All other types of rna should also be here
+	  		}elsif($tag =~ /rna/){ # All types of rna (tRNA, rRNA, tmRNA, mRNA, ncRNA, snRNA, snoRNA
 	  			my $transcript_feature = Bio::GFFValidator::GeneModel::Transcript->new( name=>($self->_get_name($feature)),
 	  															 				start=>$feature->start,
 	  															 				end=>$feature->end,
 	  															 				strand=>$feature->strand, 
 	  															 				parent=>($self->_get_parent($feature)) );
-	  			push(@transcripts, $transcript_feature);
+	  		
+	  			$transcripts{$transcript_feature->name} = $transcript_feature;
 	  		
 	  		}elsif($tag =~ /cds/){
 	  			my $exon_feature = Bio::GFFValidator::GeneModel::Exon->new( name=>($self->_get_name($feature)),
@@ -84,7 +86,7 @@ sub build {
 	  			push(@polypeptides, $polypeptide_feature);
 	  		
 	  		
-	  		}elsif($tag =~ /utr/){
+	  		}elsif($tag =~ /utr/){ # three_prime_UTR, five_prime_UTR
 	  			my $utr_feature = Bio::GFFValidator::GeneModel::UTR->new( name=>($self->_get_name($feature)),
 	  															 				  start=>$feature->start,
 	  															 				  end=>$feature->end,
@@ -98,67 +100,72 @@ sub build {
 	  	# for ease of maintainability. All gene model checks are called by the GFFValidator.pm module
 	  		
 	  	if(defined $gene){
-	  		# For every transcript, attach its 'children'. When done, attach transcript to the gene
-	  		for my $transcript (@transcripts){
-	  			#Exons
-	  			for my $exon (@exons) {
-	  				if($exon->parent eq $transcript->name){
-	  					$transcript->add_exon($exon);
-	  					if($exon->start < $transcript->start or $exon->end > $transcript->end) {
-	  						push(@{$self->overhanging_features},$exon->name);
-	  					}
-	  				}else{
-	  					push(@{$self->dangling_features},$exon->name);
-	  			
-	  				}	  				
-	  			}
-	  				
-	  			#Polypeptides
-	  			for my $polypeptide (@polypeptides) {
-	  				if($polypeptide->parent eq $transcript->name){
-	  					$transcript->add_polypeptide($polypeptide);
-	  					if($polypeptide->start < $transcript->start or $polypeptide->end > $transcript->end) {
-	  						push(@{$self->overhanging_features},$polypeptide->name);
-	  					}
-	  				}else{
-	  					push(@{$self->dangling_features},$polypeptide->name);
+	  		# Attach all the exons, utrs, polypeptides etc on to the transcripts, and then attach the transcripts to the gene
 	  		
-	  				}	  				
-	  			}
+	  		#Exons
+	  		for my $exon (@exons) {
+	  			if(exists $transcripts{$exon->parent}) { 
+	  				($transcripts{$exon->parent})->add_exon($exon);
+	  				if($self->_check_overhanging($transcripts{$exon->parent}, $exon)) {
+	  					push(@{$self->overhanging_features},$exon->name);
+	  				}
+	  			}else{
+	  				push(@{$self->dangling_features},$exon->name);
 	  			
-	  			#UTRs
-	  			for my $utr (@utrs) {
-	  				if($utr->parent eq $transcript->name){
-	  					$transcript->add_utr($utr);
-	  					if($utr->start < $transcript->start or $utr->end > $transcript->end) {
-	  						push(@{$self->overhanging_features},$utr->name);
-	  					}
-	  				}else{
-	  					push(@{$self->dangling_features},$utr->name);
+	  			}	  				
+	  		}
+
+	  		#Polypeptides
+	  		for my $polypeptide (@polypeptides) {
+	  			if(exists $transcripts{$polypeptide->parent}){
+	  				($transcripts{$polypeptide->parent})->add_polypeptide($polypeptide);
+	  				if($self->_check_overhanging($transcripts{$polypeptide->parent}, $polypeptide)) {
+	  					push(@{$self->overhanging_features},$polypeptide->name);
+	  				}
+	  			}else{
+	  				push(@{$self->dangling_features},$polypeptide->name);
+	  		
+	  			}	  				
+	  		}
+	  			
+	  		#UTRs
+	  		for my $utr (@utrs) {
+	  			if(exists $transcripts{$utr->parent}){
+	  				($transcripts{$utr->parent})->add_utr($utr);
+	  				if($self->_check_overhanging($transcripts{$utr->parent}, $utr)) {
+	  					push(@{$self->overhanging_features},$utr->name);
+	  				}
+	  			}else{
+	  				push(@{$self->dangling_features},$utr->name);
 	  				
-	  				}	  				
-	  			}
+	  			}	  				
+	  		}
 	  				
-	  			# Attach transcript
-				if($transcript->parent eq $gene->name){
-					$gene->add_transcript($transcript);
-					if($transcript->start < $gene->start or $transcript->end > $gene->end) {
-	  						push(@{$self->overhanging_features},$transcript->name);
+	  		# Attach transcripts to the gene
+	  		for my $transcript (keys %transcripts){
+				if(($transcripts{$transcript})->parent eq $gene->name){
+					$gene->add_transcript($transcripts{$transcript});
+					if($self->_check_overhanging($gene, $transcripts{$transcript})) {
+	  					push(@{$self->overhanging_features}, $transcript);
 	  				}
 				}else{
-					push(@{$self->dangling_features},$transcript->name);
+					push(@{$self->dangling_features},$transcript);
 
 				}
-	  		}
-	  		$self->gene($gene);
-	  	}else{
-	  		# No gene feature specified. Drop all the features that are meant to be part of this model into the dangling features list
-	  		foreach (@{$self->features}){
-	  			push(@{$self->dangling_features},$self->_get_name($_));
-	  		}
+			}
+	  	
+	  	$self->gene($gene);
 	  	
 	  	
+	  }else{
+	  	# No gene feature specified. Drop all the features that are meant to be part of this model into the dangling features list
+	  	
+	  	foreach (@{$self->features}){
+	  		push(@{$self->dangling_features},$self->_get_name($_));
 	  	}
+	  	
+	  	
+	  }
 	
 	$self->strands(\%strands);
 	return $self; 
@@ -185,6 +192,14 @@ sub _get_parent {
 	return $parent;
 }
 
+sub _check_overhanging {
+	# Check if the child feature is within the limits of the parent feature
+	my ($self, $parent, $child) = @_;
+	if($child->start < $parent->start or $child->end > $parent->end) {
+	   return 1;
+	}
+	return 0;
+}
 
 
 
