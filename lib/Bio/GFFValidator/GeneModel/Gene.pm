@@ -16,7 +16,7 @@ has 'transcripts'        => ( is => 'rw', isa => 'ArrayRef', default => sub { []
 has 'name'				 => ( is => 'rw', isa => 'Str'     ); # Name of the gene
 has 'start'			     => ( is => 'rw', isa => 'Str'     );
 has 'end'				 => ( is => 'rw', isa => 'Str'     );
-has 'strand'			 => ( is => 'rw', isa => 'Str'     );
+has 'strand'			 => ( is => 'rw', isa => 'Maybe[Str]'     );
 
 
 sub add_transcript {	

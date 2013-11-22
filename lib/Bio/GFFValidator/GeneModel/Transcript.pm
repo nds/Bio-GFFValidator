@@ -18,7 +18,7 @@ has 'utrs'       		 => ( is => 'rw', isa => 'ArrayRef', default => sub { [] } );
 has 'name'				 => ( is => 'rw', isa => 'Str'     ); 
 has 'start'			     => ( is => 'rw', isa => 'Str'     );
 has 'end'				 => ( is => 'rw', isa => 'Str'     );
-has 'strand'			 => ( is => 'rw', isa => 'Str'     );
+has 'strand'			 => ( is => 'rw', isa => 'Maybe[Str]'    );
 has 'parent'			 => ( is => 'rw', isa => 'Str'     );
 
 

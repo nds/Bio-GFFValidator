@@ -48,7 +48,9 @@ sub build {
 	  for my $feature (@{$self->features}){
 	  		my $tag = lc($feature->primary_tag);
 	  		
-	  		$strands{$feature->strand}++;
+	  		if($feature->strand){
+	  			$strands{$feature->strand}++;
+	  		}
 	  		
 	  		#TODO: Reduce repetition below
 	  		
