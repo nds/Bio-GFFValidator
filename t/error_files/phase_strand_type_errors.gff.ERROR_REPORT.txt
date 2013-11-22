@@ -1,0 +1,4 @@
+gene00001: Strand is invalid. Should be +, - or .
+gene00001:tfbs: Type column cannot be empty
+gene00001:exon: Phase (.) incorrect for CDS features. Should be 0,1 or 2.
+gene00001(prefix): All the features of this gene model are not on the same strand

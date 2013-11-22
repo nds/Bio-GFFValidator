@@ -1,0 +1,10 @@
+##gff-version 3
+##sequence-region   ctg123 1 1497228     
+# CDS does not have a phase
+# Strand in first line not correct
+# Type in second line empty
+ctg123	.	gene	1000	9000	.	m	.	ID=gene00001;Name=EDEN
+ctg123	.	.	1000	1012	.	+	.	ID=gene00001:tfbs;Parent=gene00001
+ctg123	.	mRNA	1050	9000	.	+	.	ID=gene00001:mRNA;Parent=gene00001;Name=EDEN.1
+ctg123	.	CDS	1050	1500	.	+	.	ID=gene00001:exon;Parent=gene00001:mRNA
+##FASTA

@@ -30,6 +30,8 @@ sub validate {
  	my $type = $self->feature->primary_tag;
  	
  	if(uc($type) eq "CDS" and $phase !~ /[012]/) {
+ 		# If the strand is anything besides [.012] Bio Perl will throw an exception and this will get caught as a parser error
+ 		# Here we really want to avoid it being . when the type is CDS
  		$self->set_error_message("line_number", "", "Phase ($phase) incorrect for CDS features. Should be 0,1 or 2." );	
 	}
 	

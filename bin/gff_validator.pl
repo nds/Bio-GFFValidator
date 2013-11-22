@@ -62,7 +62,7 @@ USAGE
 # Set defaults
  
 $output_option ||= 1;
-$error_file  = basename($gff_file).".ERROR_REPORT";
+$error_file  ||= basename($gff_file).".ERROR_REPORT";
 $debug           ||= 0;
 
 my $gff_validator = Bio::GFFValidator::GFFValidator->new(
@@ -71,3 +71,9 @@ my $gff_validator = Bio::GFFValidator::GFFValidator->new(
    handler_option => $output_option,
    #debug => $debug,
 )->run;
+
+if($gff_validator->status){
+	print "Errors reported in $error_file.\n";
+}else{
+	print "No errors found. \n";
+}

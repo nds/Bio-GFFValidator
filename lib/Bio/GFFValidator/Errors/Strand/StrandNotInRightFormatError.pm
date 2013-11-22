@@ -29,7 +29,7 @@ sub validate {
 	# For now, we limit the possible options to +, - or .
  		
 	if(not defined $strand or (defined $strand and $strand !~ /^1|0|-1$/)){
-		$self->set_error_message("line_number", "", "Strand ($strand) is invalid. Should be +, - or ." );	
+		$self->set_error_message("line_number", "", "Strand is invalid. Should be +, - or ." );	
 	}
 		
 	return $self;

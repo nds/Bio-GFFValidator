@@ -113,6 +113,8 @@ sub parse {
   
 }
 
+# TODO: Remove redundant get methods below
+
 sub get_features
 {
 	my ($self) = @_;
@@ -125,6 +127,7 @@ sub get_gene_models
 	my ($self) = @_;
 	return $self->gene_models;
 }
+
 
 
 
