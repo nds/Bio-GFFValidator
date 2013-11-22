@@ -24,7 +24,7 @@ sub print {
 
   my ($self) = @_;
   
-  open(my $fh, ">", $self->error_summary_report) or die "Cannot open $self->error_summary_report: $!";
+  open(my $fh, ">", $self->error_summary_report) or die "Cannot open ".$self->error_summary_report.": $!";
   my $date = Time::Piece->new->strftime('%d/%m/%Y');
   my $time = localtime;
 
