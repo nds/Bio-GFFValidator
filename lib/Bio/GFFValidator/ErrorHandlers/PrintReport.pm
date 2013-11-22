@@ -34,9 +34,9 @@ sub print {
   # Print header of file (if not in test mode)
   if($self->mode eq 'normal') {
   		print $fh "~~ Error report for ".$self->gff_file." ~~ \n";
-  		print STDERR "~~ Error report for ".$self->gff_file." ~~ \n";
+#   		print STDERR "~~ Error report for ".$self->gff_file." ~~ \n";
   		print $fh "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
-  		print STDERR "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
+#   		print STDERR "~~ $date, ".$time->hour.":".$time->min.":".$time->sec." ~~\n";
   }
   
   for my $error (@ {$self->errors} ){
@@ -44,7 +44,7 @@ sub print {
   	 	my $error_message = $error->get_error_message;
   	 	$error_message =~ s/\n+$//; # Incase there are any new lines put in by the error classes....like in the Gene Model Errors class
   		print $fh $error_message,"\n";
-  		print STDERR $error_message,"\n"; # Delete
+#   		print STDERR $error_message,"\n"; # Delete
 
   }
   
