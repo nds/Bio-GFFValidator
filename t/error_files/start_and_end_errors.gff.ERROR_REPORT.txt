@@ -1,0 +1,4 @@
+gene00001: Start and end values should be positive integers
+gene00001: Start of feature (-1000) is not within range
+gene00002: End of feature (1497229) is not within range
+gene00003: Start of feature (2000) should be less than the end (1000)
