@@ -25,6 +25,11 @@ has '_error_message' 	=> ( is => 'rw', isa => 'Str');
 
 sub BUILD {
     my ($self) = @_;
+    
+    # If help, display usage
+	if($self->help){
+		$self->_die_and_print_usage();
+	}
 		
 	# The user has to specify a gff file
 	if(not defined($self->gff_file)){
@@ -54,10 +59,7 @@ sub BUILD {
 		}
 	}
 	
-	# If help, display usage
-	if($self->help){
-		$self->_die_and_print_usage();
-	}
+	
 	
 	
 
