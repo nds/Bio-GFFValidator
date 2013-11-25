@@ -31,7 +31,8 @@ sub BUILD {
 		$self->_die_and_print_usage();
 	}
 	# Only accept gff files, unzipped gff files
-	if($self->gff_file !~ /\.gff$/ || $self->gff_file !~ /\.gff3$/){
+	my $basename = basename($self->gff_file);
+	if($basename !~ /\.gff3$/ and $basename !~ /\.gff$/){
 		$self->_error_message("Error: You need to provide a GFF file (unzipped).");
 		$self->_die_and_print_usage();
 	}
@@ -49,7 +50,7 @@ sub BUILD {
 	
 	# If the error file has not been specified, we revert to default
 	if(not defined($self->error_file)){
-		$self->error_file(getcwd()."/".basename($self->gff_file).".ERROR_REPORT.txt"); 
+		$self->error_file(getcwd()."/".$basename.".ERROR_REPORT.txt"); 
 	}
 
 }
