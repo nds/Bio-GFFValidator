@@ -13,9 +13,9 @@ use Moose;
 use Cwd;
 use File::Basename;
 
-has 'gff_file'        	=> ( is => 'ro', isa => 'Str');
+has 'gff_file'        	=> ( is => 'ro', isa => 'Maybe[Str]');
 has 'output_option' 	=> ( is => 'ro', isa => 'Num',      default => 1 );
-has 'error_file' 		=> ( is => 'rw', isa => 'Str'); 
+has 'error_file' 		=> ( is => 'rw', isa => 'Maybe[Str]'); 
 has 'help'        		=> ( is => 'rw', isa => 'Bool',     default  => 0 );
 
 has '_error_message' 	=> ( is => 'rw', isa => 'Str');
