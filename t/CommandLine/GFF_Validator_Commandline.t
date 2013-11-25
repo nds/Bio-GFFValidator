@@ -36,9 +36,13 @@ dies_ok{
   
 # Create a validator with a gff file
 ok(
-  my $gff_validator_commandline_wrongoption = Bio::GFFValidator::CommandLine::GFF_Validator_Commandline->new(
+  my $gff_validator_commandline = Bio::GFFValidator::CommandLine::GFF_Validator_Commandline->new(
    									gff_file =>  getcwd().'/t/data/sample.gff3',
   ),
   'Creating a validator object ok');
+  
+ok(
+  $gff_validator_commandline->run(),
+  "Running the validator OK.");
 
 done_testing();
