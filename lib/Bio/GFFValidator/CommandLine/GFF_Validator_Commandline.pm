@@ -12,6 +12,7 @@ Validate the arguments sent via the gff_validator.pl script and run the validato
 use Moose;
 use Cwd;
 use File::Basename;
+use Bio::GFFValidator::GFFValidator;
 
 has 'gff_file'        	=> ( is => 'ro', isa => 'Maybe[Str]'); # All set up to accept undefined as the script can send undefined values. We validate/set defaults below
 has 'output_option' 	=> ( is => 'rw', isa => 'Maybe[Num]');
