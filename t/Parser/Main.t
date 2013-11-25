@@ -2,8 +2,7 @@
 use strict;
 use warnings;
 use Cwd;
-use Cwd 'abs_path';
-use File::Path qw(make_path remove_tree);
+
 
 BEGIN { unshift( @INC, './lib' ) }
 
