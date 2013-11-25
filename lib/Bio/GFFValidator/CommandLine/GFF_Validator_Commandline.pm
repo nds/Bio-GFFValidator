@@ -13,18 +13,18 @@ use Moose;
 use Cwd;
 use File::Basename;
 
-has 'gff_file'        	=> ( is => 'ro', isa => 'Maybe[Str]');
-has 'output_option' 	=> ( is => 'ro', isa => 'Maybe[Num]',      default => 1 );
+has 'gff_file'        	=> ( is => 'ro', isa => 'Maybe[Str]'); # All set up to accept undefined as the script can send undefined values. We validate/set defaults below
+has 'output_option' 	=> ( is => 'rw', isa => 'Maybe[Num]');
 has 'error_file' 		=> ( is => 'rw', isa => 'Maybe[Str]'); 
-has 'help'        		=> ( is => 'rw', isa => 'Maybe[Bool]',     default  => 0 );
+has 'help'        		=> ( is => 'rw', isa => 'Maybe[Bool]');
 
 has '_error_message' 	=> ( is => 'rw', isa => 'Str');
 
-## Validate arguments 
+## Validate arguments and set defaults
 
 sub BUILD {
     my ($self) = @_;
-	
+		
 	# The user has to specify a gff file
 	if(not defined($self->gff_file)){
 		$self->_error_message("Error: You need to provide a GFF file.");
@@ -37,10 +37,20 @@ sub BUILD {
 		$self->_die_and_print_usage();
 	}
 	
+	# If the error file has not been specified, we revert to default
+	if(not defined($self->error_file)){
+		$self->error_file(getcwd()."/".$basename.".ERROR_REPORT.txt"); 
+	}
+
+	
 	# Output_option can only be 1,2 pr 3
-	if($self->output_option !~ /[123]/ ){
-		$self->_error_message("Error: The output option can only be 1,2 or 3.");
-		$self->_die_and_print_usage();
+	if(not defined($self->output_option)){
+		$self->output_option(1); # default
+	}else {
+		if($self->output_option !~ /[123]/ ){
+			$self->_error_message("Error: The output option can only be 1,2 or 3.");
+			$self->_die_and_print_usage();
+		}
 	}
 	
 	# If help, display usage
@@ -48,10 +58,7 @@ sub BUILD {
 		$self->_die_and_print_usage();
 	}
 	
-	# If the error file has not been specified, we revert to default
-	if(not defined($self->error_file)){
-		$self->error_file(getcwd()."/".$basename.".ERROR_REPORT.txt"); 
-	}
+	
 
 }
 
