@@ -41,3 +41,5 @@ GetOptions(
    									error_file => $error_file,
    									help => $help,
 );
+
+$gff_validator_commandline->run();
