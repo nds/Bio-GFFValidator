@@ -33,5 +33,12 @@ dies_ok{
    									output_option => 4,
   )}
   'Creating a validator object with a wrong option should dies';
+  
+# Create a validator with a gff file
+ok(
+  my $gff_validator_commandline_wrongoption = Bio::GFFValidator::CommandLine::GFF_Validator_Commandline->new(
+   									gff_file =>  getcwd().'/t/data/sample.gff3',
+  ),
+  'Creating a validator object ok');
 
 done_testing();
